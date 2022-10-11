@@ -1,0 +1,9 @@
+/mysql
+
+/vendor
+
+.idea
+/.env
+/www/vendor/
+/Docker/logs/
+/node_modules
