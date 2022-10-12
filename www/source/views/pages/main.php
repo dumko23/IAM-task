@@ -32,7 +32,8 @@ include('source/views/layouts/header.php');
                         ?>
                         <tr class="text-center">
                             <td class="text-center align-middle">
-                                <input id="user<?php echo $user['id'] ?>" class="single-check" type="checkbox" aria-label="Select this user">
+                                <input id="user<?php echo $user['id'] ?>" class="single-check" type="checkbox"
+                                       aria-label="Select this user">
                             </td>
                             <td class=" align-middle"><?php echo $user['name_first'] . ' ' . $user['name_last'] ?></td>
                             <td class=" align-middle"><?php echo $user['role'] ?></td>
@@ -45,8 +46,12 @@ include('source/views/layouts/header.php');
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-light border border-secondary">Left</button>
-                                    <button type="button" class="btn btn-light border border-secondary">Middle</button>
+                                    <button type="button" class="btn btn-light border border-secondary">
+                                        <i class="fa-solid fa-user-pen"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-light border border-secondary">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
