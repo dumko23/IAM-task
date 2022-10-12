@@ -35,7 +35,7 @@ include('source/views/layouts/header.php');
                                 <input id="user<?php echo $user['id'] ?>" class="single-check" type="checkbox"
                                        aria-label="Select this user">
                             </td>
-                            <td class=" align-middle"><?php echo $user['name_first'] . ' ' . $user['name_last'] ?></td>
+                            <td class=" align-middle user-name"><?php echo $user['name_first'] . ' ' . $user['name_last'] ?></td>
                             <td class=" align-middle"><?php echo $user['role'] ?></td>
                             <td class=" align-middle">
                                 <?php if ($user['status'] === 'true'): ?>
@@ -46,10 +46,16 @@ include('source/views/layouts/header.php');
                             </td>
                             <td class="text-center">
                                 <div class="btn-group" role="group" aria-label="Basic example">
-                                    <button type="button" class="btn btn-light border border-secondary">
+                                    <button type="button"
+                                            class="btn btn-light border border-secondary edit-btn"
+                                            data-toggle="modal"
+                                            data-target="#modal">
                                         <i class="fa-solid fa-user-pen"></i>
                                     </button>
-                                    <button type="button" class="btn btn-light border border-secondary">
+                                    <button type="button"
+                                            class="btn btn-light border border-secondary delete-btn"
+                                            data-toggle="modal"
+                                            data-target="#confirm">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -65,11 +71,83 @@ include('source/views/layouts/header.php');
         </div>
 
         <!-- switcher for the modal -->
-        <div class="custom-control custom-switch">
-            <input type="checkbox" class="custom-control-input" id="customSwitch1">
-            <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>
+<!--        <div class="custom-control custom-switch">-->
+<!--            <input type="checkbox" class="custom-control-input" id="customSwitch1">-->
+<!--            <label class="custom-control-label" for="customSwitch1">Toggle this switch element</label>-->
+<!--        </div>-->
+
+
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="name_first">First Name:</label>
+                                <input type="text" class="form-control" id="name_first"
+                                       placeholder="First Name" name="name_first">
+                            </div>
+                            <div class="form-group">
+                                <label for="name_last">Last Name</label>
+                                <input type="text" class="form-control" id="name_last"
+                                       placeholder="Last Name" name="name_last">
+                            </div>
+                            <div class="custom-control custom-switch form-group">
+                                <input type="checkbox" class="custom-control-input" id="statusSwitch">
+                                <label class="custom-control-label" for="statusSwitch">Status:</label>
+                                <span class="badge badge-pill badge-secondary p-2 text-center edit-status-mark align-middle"> </span>
+                                <span class="span-status"></span>
+                            </div>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text" for="inputGroupSelect01">Role</label>
+                                </div>
+                                <select class="custom-select" id="inputGroupSelect01">
+                                    <option selected disabled>Please select...</option>
+                                    <option value="1">Admin</option>
+                                    <option value="2">User</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary invisible" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
         </div>
 
+        <!-- Modal -->
+        <div class="modal fade" id="confirm" tabindex="-1" role="dialog" aria-labelledby="confirm" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirm-title"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <span class="confirm-text"></span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary confirm-close invisible" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary confirm-save">Confirm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </main>
 <?php
