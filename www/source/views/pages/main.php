@@ -17,7 +17,7 @@ include('source/views/layouts/header.php');
                     <thead>
                     <tr class="text-center">
                         <th scope="col">
-                            <input type="checkbox" id="massCheck" aria-label="Select all users">
+                            <input type="checkbox" class="massCheck" aria-label="Select all users">
                         </th>
                         <th scope="col">Name</th>
                         <th scope="col">Role</th>
@@ -28,11 +28,11 @@ include('source/views/layouts/header.php');
 
                     <tbody>
                     <?php
-                    foreach ($data as $user):
+                    foreach ($data['user_data'] as $user):
                         ?>
                         <tr class="text-center">
                             <td class="text-center align-middle">
-                                <input id="user<?php echo $user['id'] ?>" type="checkbox" aria-label="Select this user">
+                                <input id="user<?php echo $user['id'] ?>" class="single-check" type="checkbox" aria-label="Select this user">
                             </td>
                             <td class=" align-middle"><?php echo $user['name_first'] . ' ' . $user['name_last'] ?></td>
                             <td class=" align-middle"><?php echo $user['role'] ?></td>
