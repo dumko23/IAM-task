@@ -17,7 +17,7 @@ include('source/views/layouts/header.php');
                     <thead>
                     <tr class="text-center">
                         <th scope="col">
-                            <input type="checkbox" aria-label="Select all users">
+                            <input type="checkbox" id="massCheck" aria-label="Select all users">
                         </th>
                         <th scope="col">Name</th>
                         <th scope="col">Role</th>
@@ -67,8 +67,6 @@ include('source/views/layouts/header.php');
 
 
     </main>
-
-
 <?php
 include('source/views/layouts/footer.php');
 ?>
