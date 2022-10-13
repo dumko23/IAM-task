@@ -15,7 +15,7 @@ class PageController extends Controller
     {
         return [
             'path' => $this->returnPagePath('main'),
-            'data' => $this->showUsers(),
+            'data' => '',
         ];
     }
 

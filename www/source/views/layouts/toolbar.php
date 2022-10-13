@@ -1,6 +1,6 @@
 <div class="d-flex justify-content-around">
     <button type="button"
-            class="btn btn-light border border-secondary"
+            class="btn btn-light border border-secondary add-btn"
             data-toggle="modal"
             data-target="#modal">Add+
     </button>
