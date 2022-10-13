@@ -105,24 +105,31 @@ function setConfirm(actionName, actionText, flag) {
 
 $(".add-btn").on("click", function () {
     console.log("add");
-    assignUserData("", "", true, "");
+    assignUserData("", "", "true", "");
 })
 
-$(".edit-btn").on("click", function () {
+$("table").on("click", ".edit-btn" , function () {
     console.log("edit");
-    assignUserData("", "", false, "");
+    let id = $(this).closest("tr").find("input").attr("id");
+    assignUserData(
+        fetchedUserList[id].name_first,
+        fetchedUserList[id].name_last,
+        fetchedUserList[id].status,
+        fetchedUserList[id].role
+    );
 })
 
 function assignUserData(name_first, name_last, status, role) {
     $("#name_first").val(name_first);
     $("#name_last").val(name_last);
-    $("#statusSwitch").prop("checked", status);
-    if (status === false) {
+    if (status === 'false') {
         $(".edit-status-mark").addClass("badge-secondary").removeClass("badge-success");
         $(".span-status").text("Inactive");
+        $("#statusSwitch").prop("checked", false);
     } else {
         $(".edit-status-mark").addClass("badge-success").removeClass("badge-secondary");
         $(".span-status").text("Active");
+        $("#statusSwitch").prop("checked", true);
     }
     $("#role").val(role);
 }
@@ -141,6 +148,10 @@ let user = {
     "role": ""
 }
 
+let fetchedUserList = {
+
+}
+
 function getUserData() {
     $.get('getUserList', function (data) {
         userData = JSON.parse(data);
@@ -149,13 +160,13 @@ function getUserData() {
 }
 
 
-function prepareUserList(userList){
+function prepareUserList(userList) {
     $(".loading-h").remove();
-        if(userList.length > 0){
-            $("tbody tr").remove();
-            userData.userData.user_data.forEach(function (user) {
-                $("tbody").append(
-                    `<tr class="text-center">
+    if (userList.length > 0) {
+        $("tbody tr").remove();
+        userData.userData.user_data.forEach(function (user) {
+            $("tbody").append(
+                `<tr class="text-center">
                         <td class="text-center align-middle">
                             <input id="user${user.id}" class="single-check" type="checkbox"
                                    aria-label="Select this user">
@@ -182,20 +193,21 @@ function prepareUserList(userList){
                             </div>
                         </td>
                     </tr>`
-                )
-            });
-        } else {
-            $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
-            $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
-        }
+            );
+            fetchedUserList[`user${user.id}`] = user;
+        });
+        console.log(fetchedUserList);
+    } else {
+        $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
+        $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
+    }
 }
 
-$(".btn-div").on("click", ".refresh", function(){
-    console.log('refresh');
+$(".btn-div").on("click", ".refresh", function () {
     $(".no-data").remove();
     $(".refresh").remove();
     $(".btn-div").append(`<h5 class="text-center py-3 loading-h">Fetching data...</h5>`);
     getUserData();
-})
+});
 
 console.log('works');

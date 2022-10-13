@@ -78,10 +78,10 @@ include('source/views/layouts/header.php');
                                 <div class="input-group-prepend">
                                     <label class="input-group-text" for="inputGroupSelect01">Role</label>
                                 </div>
-                                <select class="custom-select" id="inputGroupSelect01">
+                                <select class="custom-select" id="role">
                                     <option selected disabled>Please select...</option>
-                                    <option value="1">Admin</option>
-                                    <option value="2">User</option>
+                                    <option value="admin">Admin</option>
+                                    <option value="user">User</option>
                                 </select>
                             </div>
                         </form>
