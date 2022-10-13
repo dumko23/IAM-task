@@ -62,4 +62,12 @@ class QueryBuilder
         $statement = $this->pdo->prepare($sql);
         return $statement->execute();
     }
+
+    public function drop($dbAndTable): bool
+    {
+        $sql = sprintf("TRUNCATE TABLE %s",
+            $dbAndTable);
+        $statement = $this->pdo->prepare($sql);
+        return $statement->execute();
+    }
 }

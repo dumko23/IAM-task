@@ -42,7 +42,7 @@ $("tbody").on("change", ".single-check", function () {
 
 $(".select-action").on("change", function () {
     let selected = $(this).val();
-    if ($(this).val() !== null) {
+    if ($(this).val() !== null && $(".single-check").length > 0) {
         $(".ok-button").prop("disabled", false);
     }
     $(".select-action").each(function () {
@@ -69,18 +69,25 @@ $(".ok-button").click(function () {
         prepareUsersId.push($(this).attr("id"));
     });
 
+    if (action === null) {
+        setConfirm("Notice", "Please, select action to perform. It looks like you've picked users, but forgot to select an action...", false);
+        return;
+    }
+
     if (prepareUsersId.length === 0) {
         setConfirm("Notice", "Please, select users. It looks like you've selected an action, but forgot to pick users...", false);
         return;
     }
     let users = "user(s) ";
     let id = [];
-    if ($(".massCheck").prop("checked") === true) {
+    if ($(".massCheck").prop("checked") === true && action === "delete") {
         users = "all users";
+        action = "drop";
     } else {
         prepareUsersId.forEach(user => {
             users += `'${$(`#${user}`).closest("tr").find(".user-name").text()}', `;
-            request.id.push(fetchedUserList[user].id);
+            id.push(fetchedUserList[user].id)
+            request.id = id;
         });
         users = users.replace(/,\s*$/, "");
 
@@ -100,8 +107,10 @@ $(".ok-button").click(function () {
             setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
             request.action = "delete";
             break;
-        default:
-            setConfirm("Notice", "Please, select action to perform. It looks like you've picked users, but forgot to select an action...", false);
+        case "drop":
+            setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
+            request.action = "drop";
+            break;
     }
 })
 
@@ -116,6 +125,10 @@ function setConfirm(actionName, actionText, flag) {
         $(".confirm-save").addClass("invisible").removeClass("visible");
     }
 }
+
+$(".close-btn").on("click", function () {
+    dropRequestAndUserData();
+});
 
 $(".add-btn").on("click", function () {
     console.log("add");
@@ -144,7 +157,6 @@ $("tbody").on("click", ".delete-btn", function () {
     request.action = "delete";
 })
 
-
 function assignUserDataToModal(name_first, name_last, status, role = null) {
     $("#name_first").val(name_first);
     $("#name_last").val(name_last);
@@ -165,6 +177,12 @@ function assignUserDataToModal(name_first, name_last, status, role = null) {
 
 // Get all users methods
 function getUserData() {
+
+    $("tbody").empty();
+    $(".btn-div").empty();
+    $(".btn-div").append(`<h5 class="text-center py-3 loading-h">Fetching data...</h5>`);
+
+
     $.get('getUserList', function (data) {
         userData = JSON.parse(data);
         prepareUserList(userData.response.user_data);
@@ -173,8 +191,10 @@ function getUserData() {
 
 function prepareUserList(userList) {
     $(".loading-h").remove();
+    $("tbody").empty();
     if (userList.length > 0) {
-        $("tbody tr").remove();
+        // $("tbody tr").remove();
+
         userList.forEach(function (user) {
             $("tbody").append(
                 `<tr class="text-center">
@@ -217,7 +237,6 @@ function prepareUserList(userList) {
 $(".btn-div").on("click", ".refresh", function () {
     $(".no-data").remove();
     $(".refresh").remove();
-    $(".btn-div").append(`<h5 class="text-center py-3 loading-h">Fetching data...</h5>`);
     getUserData();
 });
 
@@ -236,6 +255,8 @@ $(".confirm-save").on("click", function () {
     console.log(request);
     if (request.action === 'delete') {
         deleteUser(request);
+    } else if (request.action === 'drop') {
+        dropUsers();
     }
 })
 
@@ -265,6 +286,18 @@ $(".save-user").on("click", function () {
 })
 
 
+// drop all users
+function dropUsers() {
+    $.post("drop", function (data) {
+        let response = JSON.parse(data)
+        console.log(response);
+        getUserData();
+        dropRequestAndUserData();
+
+    });
+}
+
+
 // form new user object
 function formUser(name_first, name_last, status, role) {
     user.name_first = name_first;
@@ -278,7 +311,11 @@ function dropRequestAndUserData() {
     request.action = '';
     request.id = [];
     request.data = [];
-    formUser('','','false', '');
+    formUser('', '', 'false', '');
+    $(".massCheck").prop("checked", false);
+    $(".single-check").prop("checked", false);
+    $(".select-action").val("select");
+    $(".ok-button").prop("disabled", true);
 }
 
 console.log('works');

@@ -37,4 +37,13 @@ class HandleController extends Controller
             "response" => $data
         ]);
     }
+
+    public function dropTable(): string
+    {
+        $userModel = new UserModel();
+        $data = $userModel->deleteAll();
+        return json_encode([
+            "response" => $data
+        ]);
+    }
 }

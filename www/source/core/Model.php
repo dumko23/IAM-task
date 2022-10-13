@@ -70,4 +70,11 @@ class Model
                 $data
             );
     }
+
+    public function drop(){
+        return Application::get('database')
+            ->drop(
+                Application::get('config')['database']['dbAndTable']
+            );
+    }
 }

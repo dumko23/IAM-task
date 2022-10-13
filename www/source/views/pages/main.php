@@ -34,7 +34,7 @@ include('source/views/layouts/header.php');
                 <div class="container mb-3">
                     <div class="row">
                         <div class="col text-center btn-div">
-                            <h5 class="text-center py-3 loading-h">Fetching data...</h5>
+
                         </div>
                     </div>
                 </div>
@@ -51,8 +51,8 @@ include('source/views/layouts/header.php');
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <h5 class="modal-title" id="title">Modal title</h5>
+                        <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -87,7 +87,7 @@ include('source/views/layouts/header.php');
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary invisible" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary save-user" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>

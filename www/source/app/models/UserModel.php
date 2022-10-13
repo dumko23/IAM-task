@@ -23,4 +23,10 @@ class UserModel extends Model
         $response = $this->add($request);
         return Response::createResponse( true, null, $response);
     }
+
+    public function deleteAll()
+    {
+        $response = $this->drop();
+        return Response::createResponse( true, null, $response);
+    }
 }
