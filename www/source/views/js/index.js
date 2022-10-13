@@ -1,7 +1,3 @@
-// $(".massCheck").click(function () {
-//     $(".single-check").prop("checked", this.checked);
-// });
-
 $(".massCheck").on("change", function(){
     if ($(".massCheck").prop("checked") === true){
         $(".ok-button").prop("disabled", false);
@@ -13,7 +9,7 @@ $(".massCheck").on("change", function(){
 });
 
 $(".single-check").on("change", function () {
-    allChecked = $(".single-check:not(:checked)").length === 0;
+    let allChecked = $(".single-check:not(:checked)").length === 0;
     $(".massCheck").prop("checked", allChecked);
 
     if($(".single-check:checked").length > 0){
@@ -24,7 +20,6 @@ $(".single-check").on("change", function () {
 });
 
 $(".select-action").on("change", function (){
-    console.log($(this).val())
     let selected = $(this).val();
     if($(this).val() !== null){
         $(".ok-button").prop("disabled", false);
@@ -49,7 +44,8 @@ $("#statusSwitch").on("change", function () {
 $(".delete-btn").click(function () {
     setConfirm(
         "Delete user",
-        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'`
+        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'`,
+        true
     );
 })
 
