@@ -41,12 +41,11 @@ class QueryBuilder
 
     public function updateDB($dbAndTable, $data, $where, $searchItem): void
     {
-        $searchItem = "'$searchItem'";
-        $sql = sprintf('update %s set %s  where %s = %s',
+        $sql = sprintf("update %s set %s  where %s in (%s)",
             $dbAndTable,
             implode(' = ?, ', array_keys($data)) . ' = ?',
             $where,
-            $searchItem
+            implode(',', $searchItem)
         );
         $statement = $this->pdo->prepare($sql);
         $statement->execute(array_values($data));

@@ -12,13 +12,13 @@ class Model
         );
     }
 
-    public function update($data, $whereStatement, $match): void
+    public function update($data, $whereStatement)
     {
-        Application::get('database')->updateDB(
+        return Application::get('database')->updateDB(
             Application::get('config')['database']['dbAndTable'],
-            $data,
+            $data['status'],
             $whereStatement,
-            $match
+            $data['id']
         );
     }
 

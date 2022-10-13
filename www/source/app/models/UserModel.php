@@ -29,4 +29,10 @@ class UserModel extends Model
         $response = $this->drop();
         return Response::createResponse( true, null, $response);
     }
+
+    public function updateStatus(array $toggle)
+    {
+        $response = $this->update($toggle, 'id');
+        return Response::createResponse( true, null, $response);
+    }
 }

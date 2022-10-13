@@ -99,9 +99,11 @@ $(".ok-button").click(function () {
     switch (action) {
         case "setActive":
             setConfirm("Confirm action - Set Active", `Are you sure you want to SET ACTIVE to ${users}?`, true);
+            request.action = 'setActive';
             break;
         case "setInactive":
             setConfirm("Confirm action - Set Inactive", `Are you sure you want to SET INACTIVE to ${users}?`, true);
+            request.action = 'setInactive';
             break;
         case "delete":
             setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
@@ -257,6 +259,8 @@ $(".confirm-save").on("click", function () {
         deleteUser(request);
     } else if (request.action === 'drop') {
         dropUsers();
+    } else if (request.action === 'setActive' || request.action === 'setInactive'){
+        updateStatus(request);
     }
 })
 
@@ -296,6 +300,19 @@ function dropUsers() {
 
     });
 }
+
+
+// update user status
+function updateStatus(){
+    $.post("updateStatus", {'request': request}, function (data) {
+        let response = JSON.parse(data)
+        console.log(response);
+        getUserData();
+        dropRequestAndUserData();
+    });
+}
+
+
 
 
 // form new user object
