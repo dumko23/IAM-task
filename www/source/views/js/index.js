@@ -1,6 +1,6 @@
-$(".massCheck").click(function () {
-    $(".single-check").prop("checked", this.checked);
-});
+// $(".massCheck").click(function () {
+//     $(".single-check").prop("checked", this.checked);
+// });
 
 $(".massCheck").on("change", function(){
     if ($(".massCheck").prop("checked") === true){
@@ -8,7 +8,9 @@ $(".massCheck").on("change", function(){
     } else {
         $(".ok-button").prop("disabled", true);
     }
-})
+}).click(function () {
+    $(".single-check").prop("checked", this.checked);
+});
 
 $(".single-check").on("change", function () {
     allChecked = $(".single-check:not(:checked)").length === 0;
@@ -21,10 +23,15 @@ $(".single-check").on("change", function () {
     }
 });
 
-$(".custom-select").on("change", function (){
-    if ($(".custom-select").val() !== null){
+$(".select-action").on("change", function (){
+    console.log($(this).val())
+    let selected = $(this).val();
+    if($(this).val() !== null){
         $(".ok-button").prop("disabled", false);
     }
+    $(".select-action").each(function() {
+        $(this).val(selected) ;
+    })
 })
 
 $("#statusSwitch").on("change", function () {
@@ -48,13 +55,13 @@ $(".delete-btn").click(function () {
 
 $(".ok-button").click(function () {
     let prepareUsersId = [];
-    let action = $(".custom-select").val();
+    let action = $(".select-action").val();
     $(".single-check:checkbox:checked").each(function () {
         prepareUsersId.push($(this).attr("id"));
     });
 
     if (prepareUsersId.length === 0) {
-        setConfirm("Notice", "Please, select users. It looks like you selected action, but forgot to pick users...", false);
+        setConfirm("Notice", "Please, select users. It looks like you've selected an action, but forgot to pick users...", false);
         return;
     }
     let users = "user(s) ";
@@ -78,7 +85,7 @@ $(".ok-button").click(function () {
             setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
             break;
         default:
-            setConfirm("Notice", "Please, select action to perform. It looks like you picked users, but forgot to select action...", false);
+            setConfirm("Notice", "Please, select action to perform. It looks like you've picked users, but forgot to select an action...", false);
     }
 })
 

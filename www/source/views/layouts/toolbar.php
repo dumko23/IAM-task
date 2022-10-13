@@ -6,9 +6,9 @@
     </button>
     <div class="input-group w-50">
         <div class="input-group-prepend">
-            <label class="input-group-text" for="inputGroupSelect01">Apply</label>
+            <label class="input-group-text" >Apply</label>
         </div>
-        <select class="custom-select" id="inputGroupSelect01">
+        <select class="custom-select select-action" >
             <option selected disabled value="select">Please select...</option>
             <option value="setActive">Set active</option>
             <option value="setInactive">Set not active</option>
