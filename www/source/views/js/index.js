@@ -1,12 +1,31 @@
 $(".massCheck").click(function () {
     $(".single-check").prop("checked", this.checked);
-
 });
+
+$(".massCheck").on("change", function(){
+    if ($(".massCheck").prop("checked") === true){
+        $(".ok-button").prop("disabled", false);
+    } else {
+        $(".ok-button").prop("disabled", true);
+    }
+})
 
 $(".single-check").on("change", function () {
     allChecked = $(".single-check:not(:checked)").length === 0;
     $(".massCheck").prop("checked", allChecked);
+
+    if($(".single-check:checked").length > 0){
+        $(".ok-button").prop("disabled", false);
+    } else {
+        $(".ok-button").prop("disabled", true);
+    }
 });
+
+$(".custom-select").on("change", function (){
+    if ($(".custom-select").val() !== null){
+        $(".ok-button").prop("disabled", false);
+    }
+})
 
 $("#statusSwitch").on("change", function () {
     let elem = $(".edit-status-mark");
@@ -74,18 +93,6 @@ function setConfirm(actionName, actionText, flag) {
         $(".confirm-save").addClass("invisible").removeClass("visible");
     }
 }
-
-$(".custom-select").on("change", function (){
-    if ($(".custom-select").val() === null){
-        $(".ok-button").prop("disabled", true);
-        console.log($(".custom-select").val())
-    } else {
-        console.log($(".custom-select").val())
-
-        $(".ok-button").prop("disabled", false);
-    }
-})
-
 
 
 
