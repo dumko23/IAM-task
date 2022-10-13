@@ -4,9 +4,9 @@ namespace App\core;
 
 class Model
 {
-    public function add($data): void
+    public function add(array $data)
     {
-        Application::get('database')->insertToDB(
+        return Application::get('database')->insertToDB(
             Application::get('config')['database']['dbAndTable'],
             $data
         );

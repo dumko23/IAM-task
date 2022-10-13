@@ -88,7 +88,7 @@ include('source/views/layouts/header.php');
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary invisible" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save changes</button>
+                        <button type="button" class="btn btn-primary save-user" data-dismiss="modal">Save changes</button>
                     </div>
                 </div>
             </div>

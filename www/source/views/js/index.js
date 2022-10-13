@@ -4,10 +4,10 @@ getUserData();
 let request = {
     action: '',  // delete/update/add/status
     id: [],      // array of ids
-    data: null,  // object of user's data
+    data: [],  // object of user's data
 }
 
-
+// object of user's data
 let user = {
     "name_first": "",
     "name_last": "",
@@ -15,6 +15,7 @@ let user = {
     "role": ""
 }
 
+// List of
 let fetchedUserList = {
 
 }
@@ -116,13 +117,14 @@ function setConfirm(actionName, actionText, flag) {
 
 $(".add-btn").on("click", function () {
     console.log("add");
-    assignUserData("", "", "true", "");
+    assignUserDataToModal("", "", "true");
+    request.action = "add";
 })
 
 $("table").on("click", ".edit-btn" , function () {
     console.log("edit");
     let id = $(this).closest("tr").find("input").attr("id");
-    assignUserData(
+    assignUserDataToModal(
         fetchedUserList[id].name_first,
         fetchedUserList[id].name_last,
         fetchedUserList[id].status,
@@ -140,7 +142,7 @@ $("tbody").on("click", ".delete-btn", function () {
     request.action = "delete";
 })
 
-function assignUserData(name_first, name_last, status, role) {
+function assignUserDataToModal(name_first, name_last, status, role = null) {
     $("#name_first").val(name_first);
     $("#name_last").val(name_last);
     if (status === 'false') {
@@ -152,7 +154,9 @@ function assignUserData(name_first, name_last, status, role) {
         $(".span-status").text("Active");
         $("#statusSwitch").prop("checked", true);
     }
-    $("#role").val(role);
+    if(role !== null){
+        $("#role").val(role);
+    }
 }
 
 
@@ -216,10 +220,11 @@ $(".btn-div").on("click", ".refresh", function () {
 });
 
 
-// delete 1 user method
+// delete 1 user methods
 function deleteOne(request){
     $.post( "deleteOne", {'request': request}, function(data){
-        console.log(data);
+        response = JSON.parse(data)
+        console.log(response);
         getUserData();
     });
 }
@@ -230,5 +235,36 @@ $(".confirm-save").on("click", function (){
         deleteOne(request);
     }
 })
+
+
+// create new user methods
+function saveUser(request){
+    $.post( "saveUser", {'request': request}, function(data){
+        response = JSON.parse(data)
+        console.log(response);
+        getUserData();
+    });
+}
+
+$(".save-user").on("click", function(){
+    if(request.action === 'add'){
+        formUser(
+            $("#name_first").val(),
+            $("#name_last").val(),
+            $("#statusSwitch").prop("checked"),
+            $("#role").val()
+        )
+        request.data[0] = user;
+        console.log(request);
+        saveUser(request);
+    }
+})
+
+function formUser(name_first, name_last, status, role){
+    user.name_first = name_first;
+    user.name_last = name_last;
+    user.status = status;
+    user.role = role;
+}
 
 console.log('works');

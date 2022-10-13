@@ -18,13 +18,23 @@ class HandleController extends Controller
         ]);
     }
 
-    public function deleteOne(): bool|string
+    public function deleteOne(): string
     {
         $request = $_POST["request"];
         $userModel = new UserModel();
         $data = $userModel->deleteOne($request["id"]);
         return json_encode([
             "response" => $data,
+        ]);
+    }
+
+    public function addUser(): string
+    {
+        $request = $_POST["request"];
+        $userModel = new UserModel();
+        $data = $userModel->addUser($request["data"][0]);
+        return json_encode([
+            "response" => $data
         ]);
     }
 }

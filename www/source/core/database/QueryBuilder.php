@@ -24,14 +24,14 @@ class QueryBuilder
         return $statement->fetchAll();
     }
 
-    public function insertToDB($dbAndTable, $data): void
+    public function insertToDB($dbAndTable, $data): bool
     {
         $sql = sprintf('insert into %s (%s) values(%s)',
             $dbAndTable,
             implode(', ', array_keys($data)),
             str_repeat('?,', count($data) - 1) . '?');
         $statement = $this->pdo->prepare($sql);
-        $statement->execute(array_values($data));
+        return $statement->execute(array_values($data));
     }
 
     public function searchInDB(string $selectString, $dbAndTable, $where, $searchItem): bool|array
