@@ -13,9 +13,9 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
-    public function getFromDB(string $selectString, $dbAndTable, $where = '', $searchItem =''): bool|array
+    public function getFromDB(string $selectString, $dbAndTable, $where = '', $searchItem = ''): bool|array
     {
-        if ($searchItem !== ''){
+        if ($searchItem !== '') {
             $searchItem = "'$searchItem'";
         }
         $sql = sprintf("select %s from %s %s %s", $selectString, $dbAndTable, $where, $searchItem);
@@ -52,4 +52,14 @@ class QueryBuilder
         $statement->execute(array_values($data));
     }
 
+    public function delete($dbAndTable, $where, $searchItem)
+    {
+        $sql = sprintf("DELETE from %s WHERE %s IN (%s)",
+            $dbAndTable,
+            $where,
+            implode(',', $searchItem)
+        );
+        $statement = $this->pdo->prepare($sql);
+        return $statement->execute();
+    }
 }

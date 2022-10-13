@@ -111,7 +111,7 @@ include('source/views/layouts/header.php');
                         <button type="button" class="btn btn-secondary confirm-close invisible" data-dismiss="modal">
                             Cancel
                         </button>
-                        <button type="button" class="btn btn-primary confirm-save">Confirm</button>
+                        <button type="button" class="btn btn-primary confirm-save" data-dismiss="modal">Confirm</button>
                     </div>
                 </div>
             </div>

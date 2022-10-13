@@ -4,7 +4,7 @@ namespace App\core;
 
 class Response
 {
-    public static function createResponse($data, $status, $error)
+    public static function createResponse($status, $error, $data): array
     {
         return [
             'status' => $status,

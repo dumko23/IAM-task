@@ -1,6 +1,25 @@
 getUserData();
 
 
+let request = {
+    action: '',  // delete/update/add/status
+    id: [],      // array of ids
+    data: null,  // object of user's data
+}
+
+
+let user = {
+    "name_first": "",
+    "name_last": "",
+    "status": "false",
+    "role": ""
+}
+
+let fetchedUserList = {
+
+}
+
+
 $(".massCheck").on("change", function () {
     if ($(this).prop("checked") === true && $(".single-check").length > 0) {
         $(".ok-button").prop("disabled", false);
@@ -11,7 +30,7 @@ $(".massCheck").on("change", function () {
     $(".single-check").prop("checked", this.checked);
 });
 
-$(".single-check").on("change", function () {
+$("tbody").on("change", ".single-check", function () {
     let allChecked = $(".single-check:not(:checked)").length === 0;
     $(".massCheck").prop("checked", allChecked);
 
@@ -43,14 +62,6 @@ $("#statusSwitch").on("change", function () {
         $(".span-status").text("Inactive");
     }
 });
-
-$(".delete-btn").click(function () {
-    setConfirm(
-        "Delete user",
-        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'`,
-        true
-    );
-})
 
 $(".ok-button").click(function () {
     let prepareUsersId = [];
@@ -119,6 +130,16 @@ $("table").on("click", ".edit-btn" , function () {
     );
 })
 
+$("tbody").on("click", ".delete-btn", function () {
+    setConfirm(
+        "Delete user",
+        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'`,
+        true
+    );
+    request.id[0] = fetchedUserList[$(this).closest("tr").find("input").attr("id")].id;
+    request.action = "delete";
+})
+
 function assignUserData(name_first, name_last, status, role) {
     $("#name_first").val(name_first);
     $("#name_last").val(name_last);
@@ -135,36 +156,20 @@ function assignUserData(name_first, name_last, status, role) {
 }
 
 
-let request = {
-    action: '',  // delete/update/add/status
-    id: [],      // array of ids
-    data: null,  // object of user's data
-}
 
-let user = {
-    "name_first": "",
-    "name_last": "",
-    "status": "false",
-    "role": ""
-}
-
-let fetchedUserList = {
-
-}
-
+// Get all users methods
 function getUserData() {
     $.get('getUserList', function (data) {
         userData = JSON.parse(data);
-        prepareUserList(userData.userData.user_data);
+        prepareUserList(userData.response.user_data);
     })
 }
-
 
 function prepareUserList(userList) {
     $(".loading-h").remove();
     if (userList.length > 0) {
         $("tbody tr").remove();
-        userData.userData.user_data.forEach(function (user) {
+        userList.forEach(function (user) {
             $("tbody").append(
                 `<tr class="text-center">
                         <td class="text-center align-middle">
@@ -209,5 +214,21 @@ $(".btn-div").on("click", ".refresh", function () {
     $(".btn-div").append(`<h5 class="text-center py-3 loading-h">Fetching data...</h5>`);
     getUserData();
 });
+
+
+// delete 1 user method
+function deleteOne(request){
+    $.post( "deleteOne", {'request': request}, function(data){
+        console.log(data);
+        getUserData();
+    });
+}
+
+$(".confirm-save").on("click", function (){
+    console.log(request);
+    if (request.action === 'delete'){
+        deleteOne(request);
+    }
+})
 
 console.log('works');

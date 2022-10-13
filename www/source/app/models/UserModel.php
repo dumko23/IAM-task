@@ -5,10 +5,16 @@ namespace App\app\models;
 use App\core\Model;
 use App\core\Response;
 
-class UserModel
+class UserModel extends Model
 {
-    public static function showAll(): array
+    public function showAll(): array
     {
-        return Response::createResponse(Model::getData('users'), true, null);
+        return Response::createResponse( true, null, $this->getData('users'));
+    }
+
+    public function deleteOne(array $data): array
+    {
+        $response = $this->delete($data);
+        return Response::createResponse( true, null, $response);
     }
 }

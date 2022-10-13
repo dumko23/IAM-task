@@ -34,7 +34,7 @@ class Model
         return $errorList;
     }
 
-    public static function getData($data, $where = '', $searchedItem = '')
+    public function getData($data, $where = '', $searchedItem = '')
     {
         if ($data === 'users') {
             $select = 'name_first, name_last, role, status, id';
@@ -59,5 +59,15 @@ class Model
             unset($errors);
             return $result;
         }
+    }
+
+    public function delete(array $data)
+    {
+        return Application::get('database')
+            ->delete(
+                Application::get('config')['database']['dbAndTable'],
+                "id",
+                $data
+            );
     }
 }

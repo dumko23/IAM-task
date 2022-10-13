@@ -11,9 +11,20 @@ class HandleController extends Controller
 {
     public function getUserList(): string
     {
-        $data = UserModel::showAll();
+        $userModel = new UserModel();
+        $data = $userModel->showAll();
         return json_encode([
-            "userData" => $data,
+            "response" => $data,
+        ]);
+    }
+
+    public function deleteOne(): bool|string
+    {
+        $request = $_POST["request"];
+        $userModel = new UserModel();
+        $data = $userModel->deleteOne($request["id"]);
+        return json_encode([
+            "response" => $data,
         ]);
     }
 }
