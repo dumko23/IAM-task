@@ -1,5 +1,5 @@
 {
-  "name": "Albedo-Test-remake",
+  "name": "IAM-sd",
   "version": "1.0.0",
   "scripts": {
     "dev": "webpack --config www/build/config.development.js",

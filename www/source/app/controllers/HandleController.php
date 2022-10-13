@@ -18,11 +18,11 @@ class HandleController extends Controller
         ]);
     }
 
-    public function deleteOne(): string
+    public function delete(): string
     {
         $request = $_POST["request"];
         $userModel = new UserModel();
-        $data = $userModel->deleteOne($request["id"]);
+        $data = $userModel->deleteById($request["id"]);
         return json_encode([
             "response" => $data,
         ]);

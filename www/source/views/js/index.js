@@ -15,10 +15,8 @@ let user = {
     "role": ""
 }
 
-// List of
-let fetchedUserList = {
-
-}
+// List of fetched users
+let fetchedUserList = {};
 
 
 $(".massCheck").on("change", function () {
@@ -76,13 +74,16 @@ $(".ok-button").click(function () {
         return;
     }
     let users = "user(s) ";
+    let id = [];
     if ($(".massCheck").prop("checked") === true) {
         users = "all users";
     } else {
         prepareUsersId.forEach(user => {
             users += `'${$(`#${user}`).closest("tr").find(".user-name").text()}', `;
+            request.id.push(fetchedUserList[user].id);
         });
         users = users.replace(/,\s*$/, "");
+
         if (prepareUsersId.length > 5) {
             users = `${prepareUsersId.length} users`;
         }
@@ -97,6 +98,7 @@ $(".ok-button").click(function () {
             break;
         case "delete":
             setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
+            request.action = "delete";
             break;
         default:
             setConfirm("Notice", "Please, select action to perform. It looks like you've picked users, but forgot to select an action...", false);
@@ -121,7 +123,7 @@ $(".add-btn").on("click", function () {
     request.action = "add";
 })
 
-$("table").on("click", ".edit-btn" , function () {
+$("table").on("click", ".edit-btn", function () {
     console.log("edit");
     let id = $(this).closest("tr").find("input").attr("id");
     assignUserDataToModal(
@@ -142,6 +144,7 @@ $("tbody").on("click", ".delete-btn", function () {
     request.action = "delete";
 })
 
+
 function assignUserDataToModal(name_first, name_last, status, role = null) {
     $("#name_first").val(name_first);
     $("#name_last").val(name_last);
@@ -154,11 +157,10 @@ function assignUserDataToModal(name_first, name_last, status, role = null) {
         $(".span-status").text("Active");
         $("#statusSwitch").prop("checked", true);
     }
-    if(role !== null){
+    if (role !== null) {
         $("#role").val(role);
     }
 }
-
 
 
 // Get all users methods
@@ -221,33 +223,35 @@ $(".btn-div").on("click", ".refresh", function () {
 
 
 // delete 1 user methods
-function deleteOne(request){
-    $.post( "deleteOne", {'request': request}, function(data){
-        response = JSON.parse(data)
+function deleteUser(request) {
+    $.post("delete", {'request': request}, function (data) {
+        let response = JSON.parse(data)
         console.log(response);
         getUserData();
+        dropRequestAndUserData();
     });
 }
 
-$(".confirm-save").on("click", function (){
+$(".confirm-save").on("click", function () {
     console.log(request);
-    if (request.action === 'delete'){
-        deleteOne(request);
+    if (request.action === 'delete') {
+        deleteUser(request);
     }
 })
 
 
 // create new user methods
-function saveUser(request){
-    $.post( "saveUser", {'request': request}, function(data){
-        response = JSON.parse(data)
+function saveUser(request) {
+    $.post("saveUser", {'request': request}, function (data) {
+        let response = JSON.parse(data)
         console.log(response);
         getUserData();
+        dropRequestAndUserData();
     });
 }
 
-$(".save-user").on("click", function(){
-    if(request.action === 'add'){
+$(".save-user").on("click", function () {
+    if (request.action === 'add') {
         formUser(
             $("#name_first").val(),
             $("#name_last").val(),
@@ -260,11 +264,21 @@ $(".save-user").on("click", function(){
     }
 })
 
-function formUser(name_first, name_last, status, role){
+
+// form new user object
+function formUser(name_first, name_last, status, role) {
     user.name_first = name_first;
     user.name_last = name_last;
     user.status = status;
     user.role = role;
+}
+
+
+function dropRequestAndUserData() {
+    request.action = '';
+    request.id = [];
+    request.data = [];
+    formUser('','','false', '');
 }
 
 console.log('works');

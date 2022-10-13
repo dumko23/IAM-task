@@ -12,7 +12,7 @@ class UserModel extends Model
         return Response::createResponse( true, null, $this->getData('users'));
     }
 
-    public function deleteOne(array $data): array
+    public function deleteById(array $data): array
     {
         $response = $this->delete($data);
         return Response::createResponse( true, null, $response);
