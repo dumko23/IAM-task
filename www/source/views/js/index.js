@@ -353,7 +353,7 @@ $(".save-user").on("click", function () {
 })
 
 
-// drop all users
+// delete all users
 function dropUsers() {
     $.post("drop", function (data) {
         let response = JSON.parse(data)
