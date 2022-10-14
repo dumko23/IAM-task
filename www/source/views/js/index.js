@@ -1,6 +1,7 @@
 getUserData();
 
 
+// request object markup
 let request = {
     action: '',  // delete/update/add/status/drop
     id: [],      // array of ids
@@ -20,6 +21,7 @@ let user = {
 let fetchedUserList = {};
 
 
+// mass-check functionality
 $(".massCheck").on("change", function () {
     if ($(this).prop("checked") === true && $(".single-check").length > 0) {
         $(".ok-button").prop("disabled", false);
@@ -30,6 +32,8 @@ $(".massCheck").on("change", function () {
     $(".single-check").prop("checked", this.checked);
 });
 
+
+// single-to-mass-check functionality
 $("tbody").on("change", ".single-check", function () {
     let allChecked = $(".single-check:not(:checked)").length === 0;
     $(".massCheck").prop("checked", allChecked);
@@ -41,6 +45,8 @@ $("tbody").on("change", ".single-check", function () {
     }
 });
 
+
+// action select functionality
 $(".select-action").on("change", function () {
     let selected = $(this).val();
     if ($(this).val() !== null && $(".single-check").length > 0) {
@@ -52,6 +58,7 @@ $(".select-action").on("change", function () {
 })
 
 
+// status switch in modals functionality
 $("#statusSwitch").on("change", function () {
     let elem = $(".edit-status-mark");
     if ($(this).prop("checked") === true) {
@@ -63,6 +70,8 @@ $("#statusSwitch").on("change", function () {
     }
 });
 
+
+// mass-action assign functionality
 $(".ok-button").click(function () {
     let prepareUsersId = [];
     let action = $(".select-action").val();
@@ -119,6 +128,8 @@ $(".ok-button").click(function () {
     }
 })
 
+
+// setting popup's data
 function setConfirm(actionName, actionText, flag, error = '') {
     $("#confirm-title").text(actionName);
     $(".confirm-text").text(actionText);
@@ -146,18 +157,22 @@ function setConfirm(actionName, actionText, flag, error = '') {
     }
 }
 
+
+// cleaning data on modal close
 $(".close-btn").on("click", function () {
     dropRequestAndUserData();
 });
 
+
+// triggering add-user action
 $(".add-btn").on("click", function () {
-    console.log("add");
     assignUserDataToModal("", "", "true", "Add new user");
     request.action = "add";
 })
 
+
+// triggering edit-user action with data assigning
 $("table").on("click", ".edit-btn", function () {
-    console.log("edit");
     let id = $(this).closest("tr").find("input").attr("id");
     assignUserDataToModal(
         fetchedUserList[id].name_first,
@@ -170,6 +185,8 @@ $("table").on("click", ".edit-btn", function () {
     request.action = 'update';
 })
 
+
+// triggering delete-user action
 $("tbody").on("click", ".delete-btn", function () {
     setConfirm(
         "Delete user",
@@ -180,6 +197,8 @@ $("tbody").on("click", ".delete-btn", function () {
     request.action = "delete";
 })
 
+
+// assigning user's data to modal
 function assignUserDataToModal(name_first, name_last, status, title, role = null) {
     $("#title").text(title);
     $("#name_first").val(name_first);
@@ -209,7 +228,6 @@ function getUserData() {
 
     $.get('getUserList', function (data) {
         userData = JSON.parse(data);
-        console.log(userData )
         if(userData.error !== null) {
             setConfirm('Backend responded with error', '', false, userData.error);
         } else {
@@ -218,6 +236,8 @@ function getUserData() {
     })
 }
 
+
+// rendering user table with fetched data
 function prepareUserList(userList) {
     $(".loading-h").remove();
     $("tbody").empty();
@@ -262,6 +282,8 @@ function prepareUserList(userList) {
     }
 }
 
+
+// re-fetch data from DB if there was no any
 $(".btn-div").on("click", ".refresh", function () {
     $(".no-data").remove();
     $(".refresh").remove();
@@ -273,14 +295,14 @@ $(".btn-div").on("click", ".refresh", function () {
 function deleteUser(request) {
     $.post("delete", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        console.log(response);
         getUserData();
         dropRequestAndUserData();
     });
 }
 
+
+// setting action trigger to popup 'confirm' button
 $(".confirm-save").on("click", function () {
-    console.log(request);
     $('#confirm').modal('hide');
     if (request.action === 'delete') {
         deleteUser(request);
@@ -296,12 +318,13 @@ $(".confirm-save").on("click", function () {
 function saveUser(request) {
     $.post("saveUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        console.log(response);
         getUserData();
         dropRequestAndUserData();
     });
 }
 
+
+// creating user object, validating and performing add/update action
 $(".save-user").on("click", function () {
 
     formUser(
@@ -312,7 +335,6 @@ $(".save-user").on("click", function () {
     )
     if (validation(user) === true) {
         request.data[0] = user;
-        console.log(request);
 
         $('#modal').modal('hide');
 
@@ -329,7 +351,6 @@ $(".save-user").on("click", function () {
 function dropUsers() {
     $.post("drop", function (data) {
         let response = JSON.parse(data)
-        console.log(response);
         getUserData();
         dropRequestAndUserData();
 
@@ -341,7 +362,6 @@ function dropUsers() {
 function updateStatus() {
     $.post("updateStatus", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        console.log(response);
         getUserData();
         dropRequestAndUserData();
     });
@@ -352,7 +372,6 @@ function updateStatus() {
 function updateUser(request) {
     $.post("updateUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        console.log(response);
         getUserData();
         dropRequestAndUserData();
     });
@@ -399,6 +418,7 @@ function validation(user) {
 }
 
 
+// cleaning request object and dropping checkboxes and selects
 function dropRequestAndUserData() {
     request.action = '';
     request.id = [];
@@ -411,4 +431,3 @@ function dropRequestAndUserData() {
     $(".ok-button").prop("disabled", true);
 }
 
-console.log('works');
