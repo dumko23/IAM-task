@@ -22,9 +22,6 @@ return [
             PDO::ATTR_DEFAULT_FETCH_MODE => 2
         ],
     ],
-    'shareMessage' => [
-        'message' => 'Check out this Meetup with SoCal AngularJS!',
-    ],
     'pagePath' => [
         'path' => 'source/views/pages/',
         'ext' => '.php',
