@@ -61,12 +61,14 @@ include('source/views/layouts/header.php');
                             <div class="form-group">
                                 <label for="name_first">First Name:</label>
                                 <input type="text" class="form-control" id="name_first"
-                                       placeholder="First Name" name="name_first">
+                                       placeholder="First Name" name="name_first" required>
+                                <span class="font-italic text-danger" id="name-first-error"></span>
                             </div>
                             <div class="form-group">
                                 <label for="name_last">Last Name</label>
                                 <input type="text" class="form-control" id="name_last"
-                                       placeholder="Last Name" name="name_last">
+                                       placeholder="Last Name" name="name_last" required>
+                                <span class="font-italic text-danger" id="name-last-error"></span>
                             </div>
                             <div class="custom-control custom-switch form-group">
                                 <input type="checkbox" class="custom-control-input" id="statusSwitch">
@@ -84,11 +86,12 @@ include('source/views/layouts/header.php');
                                     <option value="user">User</option>
                                 </select>
                             </div>
+                            <span class="font-italic text-danger" id="role-error"></span>
                         </form>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary save-user" data-dismiss="modal">Save changes</button>
+                        <button type="button" class="btn btn-primary save-user">Save changes</button>
                     </div>
                 </div>
             </div>
@@ -111,7 +114,7 @@ include('source/views/layouts/header.php');
                         <button type="button" class="btn btn-secondary confirm-close invisible" data-dismiss="modal">
                             Cancel
                         </button>
-                        <button type="button" class="btn btn-primary confirm-save" data-dismiss="modal">Confirm</button>
+                        <button type="button" class="btn btn-primary confirm-save" >Confirm</button>
                     </div>
                 </div>
             </div>

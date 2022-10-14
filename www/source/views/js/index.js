@@ -257,6 +257,7 @@ function deleteUser(request) {
 
 $(".confirm-save").on("click", function () {
     console.log(request);
+    $('#confirm').modal('hide');
     if (request.action === 'delete') {
         deleteUser(request);
     } else if (request.action === 'drop') {
@@ -285,17 +286,18 @@ $(".save-user").on("click", function () {
         $("#statusSwitch").prop("checked"),
         $("#role").val()
     )
-    request.data[0] = user;
-    console.log(request);
+    if (validation(user) === true) {
+        request.data[0] = user;
+        console.log(request);
 
-    $('#modal').modal('hide');
+        $('#modal').modal('hide');
 
-    if (request.action === 'add') {
-        saveUser(request);
-    } else if (request.action === 'update') {
-        updateUser(request);
+        if (request.action === 'add') {
+            saveUser(request);
+        } else if (request.action === 'update') {
+            updateUser(request);
+        }
     }
-
 })
 
 
@@ -343,16 +345,27 @@ function formUser(name_first, name_last, status, role) {
 
 
 // validate input
-function validation(user){
-    if(user.name_first === ''){
-
+function validation(user) {
+    let noErrors = true;
+    if (user.name_first === '') {
+        $("#name-first-error").text('Input is empty');
+        noErrors = false;
+    } else {
+        $("#name-first-error").text('');
     }
-    if(user.name_last === ''){
-
+    if (user.name_last === '') {
+        $("#name-last-error").text('Input is empty');
+        noErrors = false;
+    } else {
+        $("#name-last-error").text('');
     }
-    if(user.role === null){
-
+    if (user.role === null) {
+        $("#role-error").text("Select user's role");
+        noErrors = false;
+    } else {
+        $("#role-error").text('');
     }
+    return noErrors;
 }
 
 

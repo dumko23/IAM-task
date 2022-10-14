@@ -12,7 +12,7 @@ class UserModel extends Model
         return [
             'name_first' => 'required|length:35|',
             'name_last' => 'required|length:30|',
-            'role' => 'null|'
+            'role' => 'nullRole|'
         ];
     }
 
@@ -30,7 +30,7 @@ class UserModel extends Model
 
     public function addUser(array $data): array
     {
-        $validation = $this->validation($data);
+        $validation = $this->validation($data, $this->rules());
         if ($validation === true) {
             $response = $this->add($data);
             return Response::createResponse(true, null, $response);
@@ -62,7 +62,7 @@ class UserModel extends Model
 
     public function updateUser(array $data): array
     {
-        $validation = $this->validation($data['data'][0]);
+        $validation = $this->validation($data['data'][0], $this->rules());
         if ($validation === true) {
             $response = $this->update($data['data'][0], 'id', $data['id']);
             return Response::createResponse(true, null, $response);
