@@ -147,6 +147,8 @@ $("table").on("click", ".edit-btn", function () {
         fetchedUserList[id].status,
         fetchedUserList[id].role
     );
+    request.id = [fetchedUserList[id].id];
+    request.action = 'update';
 })
 
 $("tbody").on("click", ".delete-btn", function () {
@@ -259,7 +261,7 @@ $(".confirm-save").on("click", function () {
         deleteUser(request);
     } else if (request.action === 'drop') {
         dropUsers();
-    } else if (request.action === 'setActive' || request.action === 'setInactive'){
+    } else if (request.action === 'setActive' || request.action === 'setInactive') {
         updateStatus(request);
     }
 })
@@ -276,16 +278,20 @@ function saveUser(request) {
 }
 
 $(".save-user").on("click", function () {
+
+    formUser(
+        $("#name_first").val(),
+        $("#name_last").val(),
+        $("#statusSwitch").prop("checked"),
+        $("#role").val()
+    )
+    request.data[0] = user;
+    console.log(request);
+
     if (request.action === 'add') {
-        formUser(
-            $("#name_first").val(),
-            $("#name_last").val(),
-            $("#statusSwitch").prop("checked"),
-            $("#role").val()
-        )
-        request.data[0] = user;
-        console.log(request);
         saveUser(request);
+    } else if (request.action === 'update') {
+        updateUser(request);
     }
 })
 
@@ -303,7 +309,7 @@ function dropUsers() {
 
 
 // update user status
-function updateStatus(){
+function updateStatus() {
     $.post("updateStatus", {'request': request}, function (data) {
         let response = JSON.parse(data)
         console.log(response);
@@ -313,6 +319,15 @@ function updateStatus(){
 }
 
 
+// update user info
+function updateUser(request) {
+    $.post("updateUser", {'request': request}, function (data) {
+        let response = JSON.parse(data)
+        console.log(response);
+        getUserData();
+        dropRequestAndUserData();
+    });
+}
 
 
 // form new user object

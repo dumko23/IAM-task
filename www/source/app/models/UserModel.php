@@ -30,9 +30,15 @@ class UserModel extends Model
         return Response::createResponse( true, null, $response);
     }
 
-    public function updateStatus(array $toggle)
+    public function updateStatus(array $data)
     {
-        $response = $this->update($toggle, 'id');
+        $response = $this->update($data['status'], 'id', $data['id']);
+        return Response::createResponse( true, null, $response);
+    }
+
+    public function updateUser(array $data)
+    {
+        $response = $this->update($data['data'][0],'id', $data['id']);
         return Response::createResponse( true, null, $response);
     }
 }

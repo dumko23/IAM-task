@@ -65,4 +65,14 @@ class HandleController extends Controller
             "response" => $data
         ]);
     }
+
+    public function updateUser()
+    {
+        $request = $_POST['request'];
+        $userModel = new UserModel();
+        $data = $userModel->updateUser($request);
+        return json_encode([
+            "response" => $data
+        ]);
+    }
 }
