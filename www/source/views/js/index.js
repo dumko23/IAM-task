@@ -288,11 +288,14 @@ $(".save-user").on("click", function () {
     request.data[0] = user;
     console.log(request);
 
+    $('#modal').modal('hide');
+
     if (request.action === 'add') {
         saveUser(request);
     } else if (request.action === 'update') {
         updateUser(request);
     }
+
 })
 
 
@@ -336,6 +339,20 @@ function formUser(name_first, name_last, status, role) {
     user.name_last = name_last;
     user.status = status;
     user.role = role;
+}
+
+
+// validate input
+function validation(user){
+    if(user.name_first === ''){
+
+    }
+    if(user.name_last === ''){
+
+    }
+    if(user.role === null){
+
+    }
 }
 
 
