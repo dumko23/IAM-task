@@ -34,11 +34,6 @@ class QueryBuilder
         return $statement->execute(array_values($data));
     }
 
-    public function searchInDB(string $selectString, $dbAndTable, $where, $searchItem): bool|array
-    {
-        return $this->getFromDB($selectString, $dbAndTable, $where, $searchItem);
-    }
-
     public function updateDB($dbAndTable, $data, $where, $searchItem): void
     {
         $sql = sprintf("update %s set %s  where %s in (%s)",
@@ -51,7 +46,7 @@ class QueryBuilder
         $statement->execute(array_values($data));
     }
 
-    public function delete($dbAndTable, $where, $searchItem)
+    public function delete($dbAndTable, $where, $searchItem): bool
     {
         $sql = sprintf("DELETE from %s WHERE %s IN (%s)",
             $dbAndTable,
