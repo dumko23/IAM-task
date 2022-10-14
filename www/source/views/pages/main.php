@@ -103,6 +103,13 @@ include('source/views/layouts/header.php');
                     </div>
                     <div class="modal-body">
                         <span class="confirm-text"></span>
+                        <div class="d-flex flex-column">
+                            <span class="error-code"></span>
+                            <span class="error-message"></span>
+                            <span class="error-where"></span>
+                            <span class="error-line"></span>
+                        </div>
+
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary confirm-close invisible" data-dismiss="modal">

@@ -37,7 +37,7 @@ class Model
         return Application::get('database')->getFromDB($select, $dbAndTable, $where, $searchedItem);
     }
 
-    public function validation($record, $rules): bool|string
+    public function validation($record, $rules): bool|array
     {
         $errors = [];
 
@@ -50,13 +50,15 @@ class Model
                     $errors = $this->addError($errors, $fieldName, "Input length should be maximum {$matches[0][0]} symbols!");
                 }
             } elseif (str_contains($rule, 'nullRole') && $record[$fieldName] === '') {
-                $errors = $this->addError($errors, $fieldName, 'Select role!');
+                $errors = $this->addError($errors, $fieldName, 'User role is not selected!');
             }
         }
         if (count($errors) === 0) {
             return true;
         } else {
-            $result = json_encode($errors);
+            $result = [
+                'error' => $errors
+            ];
             unset($errors);
             return $result;
         }

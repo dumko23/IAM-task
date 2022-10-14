@@ -119,7 +119,7 @@ $(".ok-button").click(function () {
     }
 })
 
-function setConfirm(actionName, actionText, flag) {
+function setConfirm(actionName, actionText, flag, error = '') {
     $("#confirm-title").text(actionName);
     $(".confirm-text").text(actionText);
     if (flag) {
@@ -128,6 +128,21 @@ function setConfirm(actionName, actionText, flag) {
     } else {
         $(".confirm-close").addClass("visible").removeClass("invisible");
         $(".confirm-save").addClass("invisible").removeClass("visible");
+    }
+    if (error === ''){
+        $(".error-code").text(``);
+        $(".error-message").text(``);
+        $(".error-where").text(``);
+        $(".error-line").text(``);
+    } else {
+        $(".error-code").text(`Error code: "${error.code}"`);
+        $(".error-message").text(`Error Message: "${error.message}"`);
+        $(".error-where").text(`Where: "${error.gotIn}"`);
+        $(".error-line").text(`Line: "${error.line}"`);
+        $(".btn-div").empty();
+        $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
+        $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
+        $('#confirm').modal('show');
     }
 }
 
@@ -192,7 +207,12 @@ function getUserData() {
 
     $.get('getUserList', function (data) {
         userData = JSON.parse(data);
-        prepareUserList(userData.response.user_data);
+        console.log(userData )
+        if(userData.error !== null) {
+            setConfirm('Backend responded with error', '', false, userData.error);
+        } else {
+            prepareUserList(userData.user_data);
+        }
     })
 }
 
@@ -234,7 +254,6 @@ function prepareUserList(userList) {
             );
             fetchedUserList[`user${user.id}`] = user;
         });
-        console.log(fetchedUserList);
     } else {
         $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
         $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);

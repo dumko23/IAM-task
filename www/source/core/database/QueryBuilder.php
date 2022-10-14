@@ -2,7 +2,9 @@
 
 namespace App\core\database;
 
+use Exception;
 use PDO;
+use PDOException;
 
 class QueryBuilder
 {
@@ -13,55 +15,97 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
-    public function getFromDB(string $selectString, $dbAndTable, $where = '', $searchItem = ''): bool|array
+    public function getFromDB(string $selectString, $dbAndTable, $where = '', $searchItem = ''): array
     {
-        if ($searchItem !== '') {
-            $searchItem = "'$searchItem'";
+        try {
+            if ($searchItem !== '') {
+                $searchItem = "'$searchItem'";
+            }
+            $sql = sprintf("select %s from %s %s %s", $selectString, $dbAndTable, $where, $searchItem);
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute();
+            return [
+                'data' => $statement->fetchAll()
+            ];
+        } catch (Exception|PDOException $e) {
+            return $this->formError($e);
         }
-        $sql = sprintf("select %s from %s %s %s", $selectString, $dbAndTable, $where, $searchItem);
-        $statement = $this->pdo->prepare($sql);
-        $statement->execute();
-        return $statement->fetchAll();
     }
 
-    public function insertToDB($dbAndTable, $data): bool
+    public function insertToDB($dbAndTable, $data): array
     {
-        $sql = sprintf('insert into %s (%s) values(%s)',
-            $dbAndTable,
-            implode(', ', array_keys($data)),
-            str_repeat('?,', count($data) - 1) . '?');
-        $statement = $this->pdo->prepare($sql);
-        return $statement->execute(array_values($data));
+        try {
+            $sql = sprintf('insert into %s (%s) values(%s)',
+                $dbAndTable,
+                implode(', ', array_keys($data)),
+                str_repeat('?,', count($data) - 1) . '?');
+            $statement = $this->pdo->prepare($sql);
+            return [
+                'status' => $statement->execute(array_values($data))
+            ];
+        } catch (Exception|PDOException $e) {
+            return $this->formError($e);
+        }
     }
 
-    public function updateDB($dbAndTable, $data, $where, $searchItem): void
+    public function updateDB($dbAndTable, $data, $where, $searchItem): array
     {
-        $sql = sprintf("update %s set %s  where %s in (%s)",
-            $dbAndTable,
-            implode(' = ?, ', array_keys($data)) . ' = ?',
-            $where,
-            implode(',', $searchItem)
-        );
-        $statement = $this->pdo->prepare($sql);
-        $statement->execute(array_values($data));
+        try {
+            $sql = sprintf("update %s set %s  where %s in (%s)",
+                $dbAndTable,
+                implode(' = ?, ', array_keys($data)) . ' = ?',
+                $where,
+                implode(',', $searchItem)
+            );
+            $statement = $this->pdo->prepare($sql);
+            return [
+                'status' => $statement->execute(array_values($data))
+            ];
+        } catch (Exception|PDOException $e) {
+            return $this->formError($e);
+        }
     }
 
-    public function delete($dbAndTable, $where, $searchItem): bool
+    public function delete($dbAndTable, $where, $searchItem): array
     {
-        $sql = sprintf("DELETE from %s WHERE %s IN (%s)",
-            $dbAndTable,
-            $where,
-            implode(',', $searchItem)
-        );
-        $statement = $this->pdo->prepare($sql);
-        return $statement->execute();
+        try {
+            $sql = sprintf("DELETE from %s WHERE %s IN (%s)",
+                $dbAndTable,
+                $where,
+                implode(',', $searchItem)
+            );
+            $statement = $this->pdo->prepare($sql);
+            return [
+                'status' => $statement->execute()
+            ];
+        } catch (Exception|PDOException $e) {
+            return $this->formError($e);
+        }
     }
 
-    public function drop($dbAndTable): bool
+    public function drop($dbAndTable): array
     {
-        $sql = sprintf("TRUNCATE TABLE %s",
-            $dbAndTable);
-        $statement = $this->pdo->prepare($sql);
-        return $statement->execute();
+        try {
+            $sql = sprintf("TRUNCATE TABLE %s",
+                $dbAndTable);
+            $statement = $this->pdo->prepare($sql);
+            return [
+                'status' => $statement->execute()
+            ];
+        } catch (Exception|PDOException $e) {
+            return $this->formError($e);
+        }
+    }
+
+    public function formError($e): array
+    {
+        return [
+            'error' => [
+                'code' => $e->getCode(),
+                'gotIn' => $e->getFile(),
+                'message' => $e->getMessage(),
+                'line' => $e->getLine()
+            ]
+        ];
     }
 }

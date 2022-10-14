@@ -12,59 +12,46 @@ class HandleController extends Controller
     public function getUserList(): string
     {
         $userModel = new UserModel();
-        $data = $userModel->showAll();
-        return json_encode([
-            "response" => $data,
-        ]);
+        $response = $userModel->showAll();
+        return json_encode($response);
     }
 
     public function delete(): string
     {
         $request = $_POST["request"];
         $userModel = new UserModel();
-        $data = $userModel->deleteById($request["id"]);
-        return json_encode([
-            "response" => $data,
-        ]);
+        $response = $userModel->deleteById($request["id"]);
+        return json_encode($response);
     }
 
     public function addUser(): string
     {
         $request = $_POST["request"];
         $userModel = new UserModel();
-        $data = $userModel->addUser($request["data"][0]);
-        return json_encode([
-            "response" => $data
-        ]);
+        $response = $userModel->addUser($request["data"][0]);
+        return json_encode($response);
     }
 
     public function dropTable(): string
     {
         $userModel = new UserModel();
-        $data = $userModel->deleteAll();
-        return json_encode([
-            "response" => $data
-        ]);
+        $response = $userModel->deleteAll();
+        return json_encode($response);
     }
 
     public function updateStatus(): string
     {
         $request = $_POST['request'];
-
         $userModel = new UserModel();
-        $data = $userModel->updateStatus($request);
-        return json_encode([
-            "response" => $data
-        ]);
+        $response = $userModel->updateStatus($request);
+        return json_encode($response);
     }
 
     public function updateUser():string
     {
         $request = $_POST['request'];
         $userModel = new UserModel();
-        $data = $userModel->updateUser($request);
-        return json_encode([
-            "response" => $data
-        ]);
+        $response = $userModel->updateUser($request);
+        return json_encode($response);
     }
 }

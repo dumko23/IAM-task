@@ -4,12 +4,26 @@ namespace App\core;
 
 class Response
 {
-    public static function createResponse($status, $error, $data): array
+    public static function createResponse($data): array
     {
-        return [
-            'status' => $status,
-            'error' => $error,
-            'user_data' => $data
-        ];
+        if (array_key_exists('data', $data)) {
+            return [
+                'status' => true,
+                'error' => null,
+                'user_data' => $data['data']
+            ];
+        } elseif(array_key_exists('error', $data)) {
+            return [
+                'status' => false,
+                'error' => $data['error'],
+                'user_data' => null
+            ];
+        } elseif(array_key_exists('status', $data)) {
+            return [
+                'status' => boolval($data['status']),
+                'error' => null,
+                'user_data' => null
+            ];
+        }
     }
 }

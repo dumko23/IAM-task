@@ -18,13 +18,13 @@ class UserModel extends Model
 
     public function showAll(): array
     {
-        return Response::createResponse(true, null, $this->getData('users'));
+        return Response::createResponse($this->getData('users'));
     }
 
     public function deleteById(array $data): array
     {
         $response = $this->delete($data);
-        return Response::createResponse(true, null, $response);
+        return Response::createResponse($response);
 
     }
 
@@ -33,22 +33,22 @@ class UserModel extends Model
         $validation = $this->validation($data, $this->rules());
         if ($validation === true) {
             $response = $this->add($data);
-            return Response::createResponse(true, null, $response);
+            return Response::createResponse($response);
         } else {
-            return Response::createResponse(false, $validation, null);
+            return Response::createResponse($validation);
         }
     }
 
     public function deleteAll(): array
     {
         $response = $this->drop();
-        return Response::createResponse(true, null, $response);
+        return Response::createResponse($response);
     }
 
     public function updateStatus(array $data): array
     {
         $response = $this->update(['status' => $data['status']], 'id', $data['id']);
-        return Response::createResponse(true, null, $response);
+        return Response::createResponse($response);
     }
 
     public function updateUser(array $data): array
@@ -56,9 +56,9 @@ class UserModel extends Model
         $validation = $this->validation($data['data'][0], $this->rules());
         if ($validation === true) {
             $response = $this->update($data['data'][0], 'id', $data['id']);
-            return Response::createResponse(true, null, $response);
+            return Response::createResponse($response);
         } else {
-            return Response::createResponse(false, $validation, null);
+            return Response::createResponse($validation);
         }
     }
 }
