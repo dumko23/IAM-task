@@ -37,13 +37,20 @@ class Model
         return Application::get('database')->getFromDB($select, $dbAndTable, $where, $searchedItem);
     }
 
-    public function validation($config, $record): bool|string
+    public function validation($record): bool|string
     {
         $errors = [];
 
         foreach ($this->rules() as $fieldName => $rule) {
             if (str_contains($rule, 'required') && $record[$fieldName] === '') {
                 $errors = $this->addError($errors, $fieldName, 'Input is empty!');
+            } elseif (str_contains($rule, 'maxlength')) {
+                preg_match('/(?<=maxlength:)(\d+)(?=\|)/U', $rule, $matches, PREG_OFFSET_CAPTURE);
+                if (strlen($matches[0][0]) > $rule['max']) {
+                    $errors = $this->addError($errors, $fieldName, "Input length should be maximum {$matches[0][0]} symbols!");
+                }
+            } elseif (str_contains($rule, 'null') && $record[$fieldName] === null) {
+                $errors = $this->addError($errors, $fieldName, 'Select role!');
             }
         }
         if (count($errors) === 0) {
@@ -65,7 +72,8 @@ class Model
             );
     }
 
-    public function drop(){
+    public function drop()
+    {
         return Application::get('database')
             ->drop(
                 Application::get('config')['database']['dbAndTable']

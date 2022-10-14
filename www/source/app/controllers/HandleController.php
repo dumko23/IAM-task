@@ -50,15 +50,7 @@ class HandleController extends Controller
     public function updateStatus(): string
     {
         $request = $_POST['request'];
-        if ($request['action'] === 'setActive') {
-            $request['status'] = [
-                'status' => 'true'
-            ];
-        } elseif ($request['action'] === 'setInactive') {
-            $request['status'] = [
-                'status' => 'false'
-            ];
-        }
+
         $userModel = new UserModel();
         $data = $userModel->updateStatus($request);
         return json_encode([
