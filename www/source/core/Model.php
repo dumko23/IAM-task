@@ -22,12 +22,6 @@ class Model
         );
     }
 
-    public function search(string $selectString, $dbAndTable, $where, $searchItem)
-    {
-        return Application::get('database')
-            ->searchInDB($selectString, $dbAndTable, $where, $searchItem);
-    }
-
     public function addError($errorList, $name, $message)
     {
         $errorList[$name] = $message;
