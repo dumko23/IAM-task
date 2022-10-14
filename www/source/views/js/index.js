@@ -152,7 +152,7 @@ $(".close-btn").on("click", function () {
 
 $(".add-btn").on("click", function () {
     console.log("add");
-    assignUserDataToModal("", "", "true");
+    assignUserDataToModal("", "", "true", "Add new user");
     request.action = "add";
 })
 
@@ -163,6 +163,7 @@ $("table").on("click", ".edit-btn", function () {
         fetchedUserList[id].name_first,
         fetchedUserList[id].name_last,
         fetchedUserList[id].status,
+        `Edit user: ${fetchedUserList[id].name_first} ${fetchedUserList[id].name_last}`,
         fetchedUserList[id].role
     );
     request.id = [fetchedUserList[id].id];
@@ -179,7 +180,8 @@ $("tbody").on("click", ".delete-btn", function () {
     request.action = "delete";
 })
 
-function assignUserDataToModal(name_first, name_last, status, role = null) {
+function assignUserDataToModal(name_first, name_last, status, title, role = null) {
+    $("#title").text(title);
     $("#name_first").val(name_first);
     $("#name_last").val(name_last);
     if (status === 'false') {
@@ -372,11 +374,17 @@ function validation(user) {
     if (user.name_first === '') {
         $("#name-first-error").text('Input is empty');
         noErrors = false;
+    } else if(user.name_first.length > 35){
+        $("#name-first-error").text('Input is longer than 35 symbols');
+        noErrors = false;
     } else {
         $("#name-first-error").text('');
     }
     if (user.name_last === '') {
         $("#name-last-error").text('Input is empty');
+        noErrors = false;
+    } else if(user.name_last.length > 35){
+        $("#name-last-error").text('Input is longer than 35 symbols');
         noErrors = false;
     } else {
         $("#name-last-error").text('');
