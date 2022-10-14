@@ -10,7 +10,11 @@ use App\core\Model;
 
 class PageController extends Controller
 {
-
+    /**
+     * Returns 'main' page
+     *
+     * @return array
+     */
     public function main(): array
     {
         return [
@@ -19,6 +23,11 @@ class PageController extends Controller
         ];
     }
 
+    /**
+     * Returns custom '404' page
+     *
+     * @return array
+     */
     public function page404(): array
     {
         return [

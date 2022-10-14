@@ -4,7 +4,13 @@ namespace App\core;
 
 class Response
 {
-    public static function createResponse($data): array
+    /**
+     * Forms response array according to received data
+     *
+     * @param  array  $data  data from outer methods
+     * @return array response to be sent back
+     */
+    public static function createResponse(array $data): array
     {
         if (array_key_exists('data', $data)) {
             return [
@@ -12,13 +18,13 @@ class Response
                 'error' => null,
                 'user_data' => $data['data']
             ];
-        } elseif(array_key_exists('error', $data)) {
+        } elseif (array_key_exists('error', $data)) {
             return [
                 'status' => false,
                 'error' => $data['error'],
                 'user_data' => null
             ];
-        } elseif(array_key_exists('status', $data)) {
+        } elseif (array_key_exists('status', $data)) {
             return [
                 'status' => boolval($data['status']),
                 'error' => null,

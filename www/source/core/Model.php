@@ -2,9 +2,18 @@
 
 namespace App\core;
 
+use Exception;
+
 class Model
 {
-    public function add(array $data)
+    /**
+     * Add data to table (mentioned in config)
+     *
+     * @param  array  $data  data to add
+     * @return array
+     * @throws Exception
+     */
+    public function add(array $data): array
     {
         return Application::get('database')->insertToDB(
             Application::get('config')['database']['dbAndTable'],
@@ -12,7 +21,16 @@ class Model
         );
     }
 
-    public function update($data, $whereStatement, $searchedStatement)
+    /**
+     * Update data in DB
+     *
+     * @param  array  $data               new data
+     * @param  string  $whereStatement    column name
+     * @param  array  $searchedStatement  row that matches "where" statement
+     * @return array
+     * @throws Exception
+     */
+    public function update(array $data, string $whereStatement, array $searchedStatement): array
     {
         return Application::get('database')->updateDB(
             Application::get('config')['database']['dbAndTable'],
@@ -22,22 +40,47 @@ class Model
         );
     }
 
-    public function addError($errorList, $name, $message)
+    /**
+     * Adding error definition to array that will be given as response
+     *
+     * @param  array  $errorList
+     * @param  string  $name
+     * @param  string  $message
+     * @return array
+     */
+    public function addError(array $errorList, string $name, string $message): array
     {
         $errorList[$name] = $message;
         return $errorList;
     }
 
-    public function getData($data, $where = '', $searchedItem = '')
+    /**
+     * Forming fetch call to DB
+     *
+     * @param  string  $tableName     table, where data is placed
+     * @param  string  $where         column name (optional, for specific data fetch)
+     * @param  string  $searchedItem  row that matches "where" statement (optional, for specific data fetch)
+     * @return array
+     * @throws Exception
+     */
+    public function getData(string $tableName, string $where = '', string $searchedItem = ''): array
     {
-        if ($data === 'users') {
+        if ($tableName === 'users') {
             $select = 'name_first, name_last, role, status, id';
             $dbAndTable = Application::get('config')['database']['dbAndTable'];
         }
         return Application::get('database')->getFromDB($select, $dbAndTable, $where, $searchedItem);
     }
 
-    public function validation($record, $rules): bool|array
+    /**
+     * Validation method. checks the correctness of the provided data according to the given rules.
+     * Keys of "rules" array should match keys of "record" array
+     *
+     * @param  array  $record  array of data to check
+     * @param  array  $rules   array of rules
+     * @return bool|array
+     */
+    public function validation(array $record, array $rules): bool|array
     {
         $errors = [];
 
@@ -64,17 +107,32 @@ class Model
         }
     }
 
-    public function delete(array $data)
+    /**
+     * Delete data from table by given condition
+     *
+     * @param  string  $where             column name to search data
+     * @param  array  $searchedStatement  row that matches "where" statement
+     * @return array
+     * @throws Exception
+     */
+    public function delete(string $where, array $searchedStatement): array
     {
         return Application::get('database')
             ->delete(
                 Application::get('config')['database']['dbAndTable'],
-                "id",
-                $data
+                $where,
+                $searchedStatement
             );
     }
 
-    public function drop()
+
+    /**
+     * TRUNCATE table
+     *
+     * @return array
+     * @throws Exception
+     */
+    public function drop(): array
     {
         return Application::get('database')
             ->drop(

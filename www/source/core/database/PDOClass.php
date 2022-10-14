@@ -9,7 +9,13 @@ class PDOClass
 {
     private static PDO $db;
 
-    public static function connection($config): PDO
+    /**
+     * Creates new PDO instance (if it doesn't exist already)
+     *
+     * @param  array  $config credentials for DB connection
+     * @return PDO
+     */
+    public static function connection(array $config): PDO
     {
         if (!isset(self::$db)) {
             self::$db = new PDO($config['name'] . 'dbname:' . $config['db'],
@@ -19,6 +25,8 @@ class PDOClass
     }
 
     /**
+     * Returns existing PDO instance
+     *
      * @return PDO
      */
     public static function getDb(): PDO
