@@ -294,7 +294,10 @@ $(".btn-div").on("click", ".refresh", function () {
 // delete 1 user methods
 function deleteUser(request) {
     $.post("delete", {'request': request}, function (data) {
-        let response = JSON.parse(data)
+        let response = JSON.parse(data);
+        if(response.error !== null) {
+            setConfirm('Backend responded with error', '', false, response.error);
+        }
         getUserData();
         dropRequestAndUserData();
     });
@@ -318,6 +321,9 @@ $(".confirm-save").on("click", function () {
 function saveUser(request) {
     $.post("saveUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
+        if(response.error !== null) {
+            setConfirm('Backend responded with error', '', false, response.error);
+        }
         getUserData();
         dropRequestAndUserData();
     });
@@ -351,6 +357,9 @@ $(".save-user").on("click", function () {
 function dropUsers() {
     $.post("drop", function (data) {
         let response = JSON.parse(data)
+        if(response.error !== null) {
+            setConfirm('Backend responded with error', '', false, response.error);
+        }
         getUserData();
         dropRequestAndUserData();
 
@@ -362,6 +371,9 @@ function dropUsers() {
 function updateStatus() {
     $.post("updateStatus", {'request': request}, function (data) {
         let response = JSON.parse(data)
+        if(response.error !== null) {
+            setConfirm('Backend responded with error', '', false, response.error);
+        }
         getUserData();
         dropRequestAndUserData();
     });
@@ -372,6 +384,9 @@ function updateStatus() {
 function updateUser(request) {
     $.post("updateUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
+        if(response.error !== null) {
+            setConfirm('Backend responded with error', '', false, response.error);
+        }
         getUserData();
         dropRequestAndUserData();
     });
