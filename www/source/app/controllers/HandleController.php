@@ -47,7 +47,7 @@ class HandleController extends Controller
         ]);
     }
 
-    public function updateStatus()
+    public function updateStatus(): string
     {
         $request = $_POST['request'];
         if ($request['action'] === 'setActive') {
@@ -66,7 +66,7 @@ class HandleController extends Controller
         ]);
     }
 
-    public function updateUser()
+    public function updateUser():string
     {
         $request = $_POST['request'];
         $userModel = new UserModel();

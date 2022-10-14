@@ -19,16 +19,11 @@ class PageController extends Controller
         ];
     }
 
-    public function page404()
+    public function page404(): array
     {
         return [
             'path' => $this->returnPagePath('page404'),
             'data' => '',
         ];
-    }
-
-    public function showUsers()
-    {
-        return UserModel::showAll();
     }
 }

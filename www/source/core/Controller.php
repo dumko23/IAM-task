@@ -9,5 +9,4 @@ class Controller
         $path = Application::get('config')['pagePath'];
         return $path['path'] . $page . $path['ext'];
     }
-
 }
