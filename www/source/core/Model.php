@@ -37,11 +37,11 @@ class Model
         return Application::get('database')->getFromDB($select, $dbAndTable, $where, $searchedItem);
     }
 
-    public function validation($record): bool|string
+    public function validation($record, $rules): bool|string
     {
         $errors = [];
 
-        foreach ($this->rules() as $fieldName => $rule) {
+        foreach ($rules as $fieldName => $rule) {
             if (str_contains($rule, 'required') && $record[$fieldName] === '') {
                 $errors = $this->addError($errors, $fieldName, 'Input is empty!');
             } elseif (str_contains($rule, 'maxlength')) {
@@ -49,7 +49,7 @@ class Model
                 if (strlen($matches[0][0]) > $rule['max']) {
                     $errors = $this->addError($errors, $fieldName, "Input length should be maximum {$matches[0][0]} symbols!");
                 }
-            } elseif (str_contains($rule, 'null') && $record[$fieldName] === null) {
+            } elseif (str_contains($rule, 'nullRole') && $record[$fieldName] === '') {
                 $errors = $this->addError($errors, $fieldName, 'Select role!');
             }
         }
