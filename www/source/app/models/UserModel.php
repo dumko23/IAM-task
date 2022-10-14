@@ -47,16 +47,7 @@ class UserModel extends Model
 
     public function updateStatus(array $data): array
     {
-        if ($data['action'] === 'setActive') {
-            $data['status'] = [
-                'status' => 'true'
-            ];
-        } elseif ($data['action'] === 'setInactive') {
-            $data['status'] = [
-                'status' => 'false'
-            ];
-        }
-        $response = $this->update($data['status'], 'id', $data['id']);
+        $response = $this->update(['status' => $data['status']], 'id', $data['id']);
         return Response::createResponse(true, null, $response);
     }
 

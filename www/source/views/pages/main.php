@@ -9,10 +9,7 @@ include('source/views/layouts/header.php');
         <div class="card container">
             <div class="card-body">
                 <h5 class="card-title">Users</h5>
-
                 <?php include('source/views/layouts/toolbar.php') ?>
-
-
                 <table class="table table-bordered mt-3">
                     <thead>
                     <tr class="text-center">
@@ -25,7 +22,6 @@ include('source/views/layouts/header.php');
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
-
                     <tbody>
 
 
@@ -38,8 +34,6 @@ include('source/views/layouts/header.php');
                         </div>
                     </div>
                 </div>
-
-
                 <?php include('source/views/layouts/toolbar.php') ?>
             </div>
         </div>

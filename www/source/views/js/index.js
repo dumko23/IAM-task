@@ -2,9 +2,10 @@ getUserData();
 
 
 let request = {
-    action: '',  // delete/update/add/status
+    action: '',  // delete/update/add/status/drop
     id: [],      // array of ids
-    data: [],  // object of user's data
+    data: [],    // object of user's data
+    status: []   // status to change for
 }
 
 // object of user's data
@@ -100,10 +101,12 @@ $(".ok-button").click(function () {
         case "setActive":
             setConfirm("Confirm action - Set Active", `Are you sure you want to SET ACTIVE to ${users}?`, true);
             request.action = 'setActive';
+            request.status = 'true';
             break;
         case "setInactive":
             setConfirm("Confirm action - Set Inactive", `Are you sure you want to SET INACTIVE to ${users}?`, true);
             request.action = 'setInactive';
+            request.status = 'false';
             break;
         case "delete":
             setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
@@ -373,6 +376,7 @@ function dropRequestAndUserData() {
     request.action = '';
     request.id = [];
     request.data = [];
+    request.status = [];
     formUser('', '', 'false', '');
     $(".massCheck").prop("checked", false);
     $(".single-check").prop("checked", false);
