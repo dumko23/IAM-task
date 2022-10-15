@@ -140,7 +140,7 @@ function setConfirm(actionName, actionText, flag, error = '') {
         $(".confirm-close").addClass("visible").removeClass("invisible");
         $(".confirm-save").addClass("invisible").removeClass("visible");
     }
-    if (error === ''){
+    if (error === '') {
         $(".error-code").text(``);
         $(".error-message").text(``);
         $(".error-where").text(``);
@@ -220,15 +220,14 @@ function assignUserDataToModal(name_first, name_last, status, title, role = null
 
 // Get all users methods
 function getUserData() {
-
     $("tbody").empty();
     $(".btn-div").empty();
     $(".btn-div").append(`<h5 class="text-center py-3 loading-h">Fetching data...</h5>`);
 
-
     $.get('getUserList', function (data) {
-        userData = JSON.parse(data);
-        if(userData.error !== null) {
+        let userData = JSON.parse(data);
+        if (userData.error !== null) {
+
             setConfirm('Backend responded with error', '', false, userData.error);
         } else {
             prepareUserList(userData.user_data);
@@ -295,7 +294,7 @@ $(".btn-div").on("click", ".refresh", function () {
 function deleteUser(request) {
     $.post("delete", {'request': request}, function (data) {
         let response = JSON.parse(data);
-        if(response.error !== null) {
+        if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
         }
         getUserData();
@@ -305,8 +304,9 @@ function deleteUser(request) {
 
 
 // setting action trigger to popup 'confirm' button
-$(".confirm-save").on("click", function () {
+$(document).on('click', '.confirm-save', function () {
     $('#confirm').modal('hide');
+
     if (request.action === 'delete') {
         deleteUser(request);
     } else if (request.action === 'drop') {
@@ -321,7 +321,7 @@ $(".confirm-save").on("click", function () {
 function saveUser(request) {
     $.post("saveUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        if(response.error !== null) {
+        if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
         }
         getUserData();
@@ -331,8 +331,7 @@ function saveUser(request) {
 
 
 // creating user object, validating and performing add/update action
-$(".save-user").on("click", function () {
-
+$(document).on('click', '#save-user', function () {
     formUser(
         $("#name_first").val(),
         $("#name_last").val(),
@@ -357,7 +356,7 @@ $(".save-user").on("click", function () {
 function dropUsers() {
     $.post("drop", function (data) {
         let response = JSON.parse(data)
-        if(response.error !== null) {
+        if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
         }
         getUserData();
@@ -371,7 +370,7 @@ function dropUsers() {
 function updateStatus() {
     $.post("updateStatus", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        if(response.error !== null) {
+        if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
         }
         getUserData();
@@ -384,7 +383,7 @@ function updateStatus() {
 function updateUser(request) {
     $.post("updateUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
-        if(response.error !== null) {
+        if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
         }
         getUserData();
@@ -408,7 +407,7 @@ function validation(user) {
     if (user.name_first === '') {
         $("#name-first-error").text('Input is empty');
         noErrors = false;
-    } else if(user.name_first.length > 35){
+    } else if (user.name_first.length > 35) {
         $("#name-first-error").text('Input is longer than 35 symbols');
         noErrors = false;
     } else {
@@ -417,7 +416,7 @@ function validation(user) {
     if (user.name_last === '') {
         $("#name-last-error").text('Input is empty');
         noErrors = false;
-    } else if(user.name_last.length > 35){
+    } else if (user.name_last.length > 35) {
         $("#name-last-error").text('Input is longer than 35 symbols');
         noErrors = false;
     } else {

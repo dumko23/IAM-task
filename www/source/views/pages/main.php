@@ -84,7 +84,7 @@ include('source/views/layouts/header.php');
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary save-user">Save changes</button>
+                        <button type="button" class="btn btn-primary save-user" id="save-user" >Save changes</button>
                     </div>
                 </div>
             </div>
@@ -104,8 +104,8 @@ include('source/views/layouts/header.php');
                         <span class="confirm-text"></span>
                         <div class="d-flex flex-column">
                             <span class="error-code"></span>
-                            <span class="error-message"></span>
-                            <span class="error-where"></span>
+                            <span class="error-message text-break"></span>
+                            <span class="error-where text-break"></span>
                             <span class="error-line"></span>
                         </div>
 
@@ -114,7 +114,7 @@ include('source/views/layouts/header.php');
                         <button type="button" class="btn btn-secondary confirm-close invisible" data-dismiss="modal">
                             Cancel
                         </button>
-                        <button type="button" class="btn btn-primary confirm-save" >Confirm</button>
+                        <button type="button" class="btn btn-primary confirm-save">Confirm</button>
                     </div>
                 </div>
             </div>
