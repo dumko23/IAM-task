@@ -63,12 +63,8 @@ class Model
      * @return array
      * @throws Exception
      */
-    public function getData(string $tableName, string $where = '', string $searchedItem = ''): array
+    public function getData(string $tableName,string $select, string $dbAndTable, string $where = '', string $searchedItem = ''): array
     {
-        if ($tableName === 'users') {
-            $select = 'name_first, name_last, role, status, id';
-            $dbAndTable = Application::get('config')['database']['dbAndTable'];
-        }
         return Application::get('database')->getFromDB($select, $dbAndTable, $where, $searchedItem);
     }
 

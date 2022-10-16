@@ -2,6 +2,7 @@
 
 namespace App\core\database;
 
+use App\core\Application;
 use Exception;
 use PDO;
 use PDOException;
@@ -152,5 +153,34 @@ class QueryBuilder
                 'line' => $e->getLine()
             ]
         ];
+    }
+
+    public function executeQuery(string $query): bool
+    {
+        try{
+            $this->pdo->prepare($query)->execute();
+            return true;
+        } catch(Exception|PDOException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+
+    public function createMigrationsTable(): void
+    {
+        try{
+            $this->pdo->prepare(sprintf(
+                    'CREATE TABLE IF NOT EXISTS %s.migrations (
+                                        migration_name VARCHAR(255) NOT NULL UNIQUE,
+                                        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                                        PRIMARY KEY(migration_name)
+                            )',
+                    Application::get('config')['database']['db'])
+            )->execute();
+        } catch(Exception|PDOException $e) {
+            echo $e->getMessage();
+            die();
+        }
     }
 }

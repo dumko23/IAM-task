@@ -2,6 +2,7 @@
 
 namespace App\app\models;
 
+use App\core\Application;
 use App\core\Model;
 use App\core\Response;
 use Exception;
@@ -29,7 +30,13 @@ class UserModel extends Model
      */
     public function showAll(): array
     {
-        return Response::createResponse($this->getData('users'));
+        return Response::createResponse(
+            $this->getData(
+                'users',
+                'name_first, name_last, role, status, id',
+                Application::get('config')['database']['dbAndTable']
+            )
+        );
     }
 
     /**
