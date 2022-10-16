@@ -21,7 +21,7 @@ class migration_0002_insert_mockup_data implements MigrationsInterface
                     (5,	'asd',	'asdsd',	'false',	'admin'),
                     (6,	'qwew',	'wewe',	'true',	'admin')"
             );
-        if ($result) {
+        if ($result === true) {
             return true;
         } else {
             print_r($result . PHP_EOL);
@@ -36,7 +36,7 @@ class migration_0002_insert_mockup_data implements MigrationsInterface
                 "USE `UsersManagement`;
                  DELETE FROM `UsersManagement.users` WHERE id IN (`1`, `2`, `3`, `4`, `5`, `6`)"
             );
-        if ($result) {
+        if ($result === true) {
             return true;
         } else {
             print_r($result . PHP_EOL);

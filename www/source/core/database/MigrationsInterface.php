@@ -6,6 +6,11 @@ use App\core\Application;
 
 interface MigrationsInterface
 {
+    /**
+     * Action to be called if migration process starts.
+     *
+     * @return bool
+     */
     public static function up(): bool;
     // Possible realization
 //    {
@@ -21,7 +26,7 @@ interface MigrationsInterface
 //                    PRIMARY KEY (`id`)
 //                    ) '
 //            );
-//        if ($result) {
+//        if ($result === true) {
 //            return true;
 //        } else {
 //            print_r($result . PHP_EOL);
@@ -29,6 +34,12 @@ interface MigrationsInterface
 //        }
 //    }
 
+
+    /**
+     * Action to be called if rollback process starts.
+     *
+     * @return bool
+     */
     public static function down(): bool;
     // Possible realization
 //    {
@@ -37,7 +48,7 @@ interface MigrationsInterface
 //                'USE `UsersManagement`;
 //                 DROP TABLE `UsersManagement.users`'
 //            );
-//        if ($result) {
+//        if ($result === true) {
 //            return true;
 //        } else {
 //            print_r($result . PHP_EOL);

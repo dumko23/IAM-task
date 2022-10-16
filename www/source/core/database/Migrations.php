@@ -8,7 +8,13 @@ use Exception;
 
 class Migrations
 {
-
+    /**
+     * Runs migration process. Calls up() methods in migrations classes from 'app/migrations/' .
+     * Logs every action in STDOUT. Applied migrations stored in 'migrations' table in DB in order of application.
+     *
+     * @return void
+     * @throws Exception
+     */
     public function applyMigrations(): void
     {
         $this->message("Starting migration process.");
@@ -49,6 +55,13 @@ class Migrations
         $this->message("Applied $count migrations.");
     }
 
+
+    /**
+     * Creates migration table in DB.
+     *
+     * @return void
+     * @throws Exception
+     */
     public function initiateMigrationsTable(): void
     {
         Application::get('database')
@@ -57,6 +70,13 @@ class Migrations
             );
     }
 
+
+    /**
+     * Fetch already applied migrations from 'migrations' table in DB.
+     *
+     * @return array array of applied migrations
+     * @throws Exception
+     */
     public function getAppliedMigrations(): array
     {
         return (new Model)->getData(
@@ -66,7 +86,15 @@ class Migrations
         );
     }
 
-    public function rollback()
+
+    /**
+     * Rollback every applied migration in reverse order. Migrations will be deleted from 'migrations' table in DB.
+     * Logs every action in STDOUT.
+     *
+     * @return void
+     * @throws Exception
+     */
+    public function rollback(): void
     {
         $this->message("Rolling back.");
         $appliedMigrations = array_column($this->getAppliedMigrations()['data'], 'migration_name');
@@ -93,11 +121,27 @@ class Migrations
         $this->message("Rolled back $count migrations.");
     }
 
+
+    /**
+     * Logs action in STDOUT.
+     *
+     * @param  string  $message
+     * @return void
+     */
     public function message(string $message): void
     {
         echo '[' . date('Y-m-d H:i:s') . '] - ' . $message . PHP_EOL;
     }
 
+
+    /**
+     * Stores migration file name in 'migrations' table in DB. Checks if there was no error. Otherwise, logs error in
+     * STDOUT.
+     *
+     * @param  string  $migration  migration name
+     * @return bool
+     * @throws Exception
+     */
     private function storeMigration(string $migration): bool
     {
         $result = Application::get('database')
@@ -113,6 +157,14 @@ class Migrations
         }
     }
 
+
+    /**
+     * Delete migration from 'migrations' table in DB. Checks if there was no error. Otherwise, logs error in STDOUT.
+     *
+     * @param  string  $migration  migration name
+     * @return bool
+     * @throws Exception
+     */
     public function deleteMigration(string $migration): bool
     {
         $result = Application::get('database')

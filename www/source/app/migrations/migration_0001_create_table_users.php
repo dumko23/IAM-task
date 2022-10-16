@@ -24,7 +24,7 @@ class migration_0001_create_table_users implements MigrationsInterface
                     PRIMARY KEY (`id`)
                     ) '
             );
-        if ($result) {
+        if ($result === true) {
             return true;
         } else {
             print_r($result . PHP_EOL);
@@ -39,7 +39,7 @@ class migration_0001_create_table_users implements MigrationsInterface
                 'USE `UsersManagement`;
                  DROP TABLE `UsersManagement.users`'
             );
-        if ($result) {
+        if ($result === true) {
             return true;
         } else {
             print_r($result . PHP_EOL);

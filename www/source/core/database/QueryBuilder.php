@@ -155,19 +155,30 @@ class QueryBuilder
         ];
     }
 
-    public function executeQuery(string $query): bool
+
+    /**
+     * Query to execute in DB. Returns true if success, otherwise return array with error description.
+     *
+     * @param  string  $query  query string to execute.
+     * @return bool|array
+     */
+    public function executeQuery(string $query): bool|array
     {
         try{
             $this->pdo->prepare($query)->execute();
             return true;
         } catch(Exception|PDOException $e) {
-            echo $e->getMessage();
-            return false;
+            return $this->formError($e);
         }
     }
 
 
-    public function createMigrationsTable(): void
+    /**
+     * Creates 'migration' table in DB. If error occurs - returns array with error description.
+     *
+     * @return array[]
+     */
+    public function createMigrationsTable(): array
     {
         try{
             $this->pdo->prepare(sprintf(
@@ -178,9 +189,9 @@ class QueryBuilder
                             )',
                     Application::get('config')['database']['db'])
             )->execute();
+            return [];
         } catch(Exception|PDOException $e) {
-            echo $e->getMessage();
-            die();
+            return $this->formError($e);
         }
     }
 }
