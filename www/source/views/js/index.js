@@ -432,6 +432,14 @@ function validation(user) {
 }
 
 
+$('#modal').on('hide.bs.modal', function (e) {
+    $("#name-first-error").text('');
+    $("#name-last-error").text('');
+    $("#role-error").text('');
+    $("#statusSwitch").prop("checked", true);
+})
+
+
 // cleaning request object and dropping checkboxes and selects
 function dropRequestAndUserData() {
     request.action = '';
