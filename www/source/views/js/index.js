@@ -190,7 +190,7 @@ $("table").on("click", ".edit-btn", function () {
 $("tbody").on("click", ".delete-btn", function () {
     setConfirm(
         "Delete user",
-        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'`,
+        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'?`,
         true
     );
     request.id[0] = fetchedUserList[$(this).closest("tr").find("input").attr("id")].id;
@@ -432,6 +432,7 @@ function validation(user) {
 }
 
 
+// Remove validation messages from modal on closing
 $('#modal').on('hide.bs.modal', function (e) {
     $("#name-first-error").text('');
     $("#name-last-error").text('');
