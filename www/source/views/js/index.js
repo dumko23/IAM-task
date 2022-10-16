@@ -438,6 +438,7 @@ $('#modal').on('hide.bs.modal', function (e) {
     $("#name-last-error").text('');
     $("#role-error").text('');
     $("#statusSwitch").prop("checked", true);
+    $("#role").val('default');
 })
 
 

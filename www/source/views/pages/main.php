@@ -74,7 +74,7 @@ include('source/views/layouts/header.php');
                                     <label class="input-group-text" for="inputGroupSelect01">Role</label>
                                 </div>
                                 <select class="custom-select" id="role">
-                                    <option selected disabled>Please select...</option>
+                                    <option selected disabled value="default">Please select...</option>
                                     <option value="admin">Admin</option>
                                     <option value="user">User</option>
                                 </select>
