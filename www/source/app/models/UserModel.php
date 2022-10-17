@@ -66,7 +66,11 @@ class UserModel extends Model
         $data['name_last'] = htmlspecialchars(strip_tags(trim($data['name_last'])));
         $validation = $this->validation($data, $this->rules());
         if ($validation === true) {
-            $response = $this->add($data);
+            $result = $this->add($data);
+            if (array_key_exists('error', $result) === true) {
+                return Response::createResponse($result);
+            }
+            $response = $this->getLastItem();
             return Response::createResponse($response);
         } else {
             return Response::createResponse($validation);
@@ -113,7 +117,15 @@ class UserModel extends Model
         $data['data'][0]['name_last'] = htmlspecialchars(strip_tags(trim($data['data'][0]['name_last'])));
         $validation = $this->validation($data['data'][0], $this->rules());
         if ($validation === true) {
-            $response = $this->update($data['data'][0], 'id', $data['id']);
+            $result = $this->update($data['data'][0], 'id', $data['id']);
+            if (array_key_exists('error', $result) === true) {
+                return Response::createResponse($result);
+            }
+            $response = $this->getData(
+                'name_first, name_last, role, status, id',
+                Application::get('config')['database']['dbAndTable'],
+                'WHERE id=',
+                $data['id'][0]);
             return Response::createResponse($response);
         } else {
             return Response::createResponse($validation);

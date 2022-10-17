@@ -22,13 +22,11 @@ class Response
             return [
                 'status' => false,
                 'error' => $data['error'],
-                'user_data' => null
             ];
         } elseif (array_key_exists('status', $data)) {
             return [
                 'status' => boolval($data['status']),
                 'error' => null,
-                'user_data' => null
             ];
         }
     }

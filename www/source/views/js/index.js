@@ -242,36 +242,7 @@ function prepareUserList(userList) {
         // $("tbody tr").remove();
 
         userList.forEach(function (user) {
-            $("tbody").append(
-                `<tr class="text-center">
-                        <td class="text-center align-middle">
-                            <input id="user${user.id}" class="single-check" type="checkbox"
-                                   aria-label="Select this user">
-                        </td>
-                        <td class=" align-middle user-name">${user.name_first} ${user.name_last}</td>
-                        <td class=" align-middle">${user.role}</td>
-                        <td class=" align-middle">
-                                <span class="badge badge-pill ${user.status === 'true' ? 'badge-success' : 'badge-secondary'} p-2 text-center"> </span>
-                        </td>
-                        <td class="text-center">
-                            <div class="btn-group" role="group" aria-label="Basic example">
-                                <button type="button"
-                                        class="btn btn-light border border-secondary edit-btn"
-                                        data-toggle="modal"
-                                        data-target="#modal">
-                                    <i class="fa-solid fa-user-pen"></i>
-                                </button>
-                                <button type="button"
-                                        class="btn btn-light border border-secondary delete-btn"
-                                        data-toggle="modal"
-                                        data-target="#confirm">
-                                    <i class="fa-solid fa-trash"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>`
-            );
-            fetchedUserList[`user${user.id}`] = user;
+            appendTableRow(user);
         });
     } else {
         $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
@@ -327,9 +298,44 @@ function saveUser(request) {
             }
         }
         $('#modal').modal('hide');
-        getUserData();
+        appendTableRow(response['user_data']);
         dropRequestAndUserData();
     });
+}
+
+
+function appendTableRow(data){
+
+    $("tbody").append(
+        `<tr class="text-center">
+                        <td class="text-center align-middle">
+                            <input id="user${data.id}" class="single-check" type="checkbox"
+                                   aria-label="Select this user">
+                        </td>
+                        <td class=" align-middle user-name">${data.name_first} ${data.name_last}</td>
+                        <td class=" align-middle user-role">${data.role}</td>
+                        <td class=" align-middle">
+                                <span class="badge badge-pill ${data.status === 'true' ? 'badge-success' : 'badge-secondary'} p-2 text-center"> </span>
+                        </td>
+                        <td class="text-center">
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <button type="button"
+                                        class="btn btn-light border border-secondary edit-btn"
+                                        data-toggle="modal"
+                                        data-target="#modal">
+                                    <i class="fa-solid fa-user-pen"></i>
+                                </button>
+                                <button type="button"
+                                        class="btn btn-light border border-secondary delete-btn"
+                                        data-toggle="modal"
+                                        data-target="#confirm">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>`
+    );
+    fetchedUserList[`user${data.id}`] = data;
 }
 
 
@@ -341,6 +347,7 @@ $(document).on('click', '#save-user', function () {
         $("#statusSwitch").prop("checked"),
         $("#role").val()
     )
+    // let usedId = ''
     if (validation(user) === true) {
         request.data[0] = user;
 
@@ -391,7 +398,14 @@ function updateUser(request) {
             }
         }
         $('#modal').modal('hide');
-        getUserData();
+        let updatedUser = response['user_data'][0];
+        fetchedUserList[`user${updatedUser.id}`] = updatedUser;
+        let tr = $(`#user${updatedUser.id}`).closest("tr");
+        tr.find(".user-name").text(`${updatedUser.name_first} ${updatedUser.name_last}`);
+        tr.find(".badge-pill")
+                .addClass(`${updatedUser.status === 'true' ? 'badge-success' : 'badge-secondary'}`)
+                .removeClass(`${updatedUser.status === 'true' ? 'badge-secondary' : 'badge-success'}`)
+        tr.find('.user-role').val(updatedUser.role);
         dropRequestAndUserData();
     });
 }

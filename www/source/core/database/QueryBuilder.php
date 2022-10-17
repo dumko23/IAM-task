@@ -31,7 +31,7 @@ class QueryBuilder
             if ($searchItem !== '') {
                 $searchItem = "'$searchItem'";
             }
-            $sql = sprintf("select %s from %s %s %s", $selectString, $dbAndTable, $where, $searchItem);
+            $sql = sprintf("select %s from %s %s%s", $selectString, $dbAndTable, $where, $searchItem);
             $statement = $this->pdo->prepare($sql);
             $statement->execute();
             return [
@@ -168,6 +168,21 @@ class QueryBuilder
             $this->pdo->prepare($query)->execute();
             return true;
         } catch(Exception|PDOException $e) {
+            return $this->formError($e);
+        }
+    }
+
+
+    public function getLastItem(string $dbAndTable, string $orderBy): array
+    {
+        try {
+            $sql = sprintf("SELECT * FROM %s ORDER BY %s DESC LIMIT 1", $dbAndTable, $orderBy);
+            $statement = $this->pdo->prepare($sql);
+            $statement->execute();
+            return [
+                'data' => $statement->fetchAll()[0]
+            ];
+        } catch (Exception|PDOException $e) {
             return $this->formError($e);
         }
     }
