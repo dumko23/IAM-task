@@ -57,13 +57,14 @@ class Model
     /**
      * Forming fetch call to DB
      *
-     * @param  string  $tableName     table, where data is placed
+     * @param  string  $select        selectable data
+     * @param  string  $dbAndTable
      * @param  string  $where         column name (optional, for specific data fetch)
      * @param  string  $searchedItem  row that matches "where" statement (optional, for specific data fetch)
      * @return array
      * @throws Exception
      */
-    public function getData(string $tableName,string $select, string $dbAndTable, string $where = '', string $searchedItem = ''): array
+    public function getData(string $select, string $dbAndTable, string $where = '', string $searchedItem = ''): array
     {
         return Application::get('database')->getFromDB($select, $dbAndTable, $where, $searchedItem);
     }
@@ -90,6 +91,8 @@ class Model
                 }
             } elseif (str_contains($rule, 'nullRole') && $record[$fieldName] === '') {
                 $errors = $this->addError($errors, $fieldName, 'User role is not selected!');
+            } elseif (str_contains($rule, 'rightRole') && !in_array($record[$fieldName], ['admin','user'])) {
+                $errors = $this->addError($errors, $fieldName, 'Invalid role provided!');
             }
         }
         if (count($errors) === 0) {

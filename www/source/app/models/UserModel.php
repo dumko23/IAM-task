@@ -19,7 +19,7 @@ class UserModel extends Model
         return [
             'name_first' => 'required|length:35|',
             'name_last' => 'required|length:30|',
-            'role' => 'nullRole|'
+            'role' => 'nullRole|rightRole|'
         ];
     }
 
@@ -27,12 +27,12 @@ class UserModel extends Model
      * Returning response array with all users data in DB
      *
      * @return array
+     * @throws Exception
      */
     public function showAll(): array
     {
         return Response::createResponse(
             $this->getData(
-                'users',
                 'name_first, name_last, role, status, id',
                 Application::get('config')['database']['dbAndTable']
             )
@@ -62,6 +62,8 @@ class UserModel extends Model
      */
     public function addUser(array $data): array
     {
+        $data['name_first'] = htmlspecialchars(strip_tags(trim($data['name_first'])));
+        $data['name_last'] = htmlspecialchars(strip_tags(trim($data['name_last'])));
         $validation = $this->validation($data, $this->rules());
         if ($validation === true) {
             $response = $this->add($data);
@@ -76,6 +78,7 @@ class UserModel extends Model
      * Deleting all users from DB (i.e. TRUNCATING table)
      *
      * @return array
+     * @throws Exception
      */
     public function deleteAll(): array
     {
@@ -89,6 +92,7 @@ class UserModel extends Model
      *
      * @param  array  $data  array with status value and user ids
      * @return array
+     * @throws Exception
      */
     public function updateStatus(array $data): array
     {
@@ -101,9 +105,12 @@ class UserModel extends Model
      *
      * @param  array  $data  array with user updated data and id
      * @return array
+     * @throws Exception
      */
     public function updateUser(array $data): array
     {
+        $data['data'][0]['name_first'] = htmlspecialchars(strip_tags(trim($data['data'][0]['name_first'])));
+        $data['data'][0]['name_last'] = htmlspecialchars(strip_tags(trim($data['data'][0]['name_last'])));
         $validation = $this->validation($data['data'][0], $this->rules());
         if ($validation === true) {
             $response = $this->update($data['data'][0], 'id', $data['id']);

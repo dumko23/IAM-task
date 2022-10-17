@@ -322,8 +322,13 @@ function saveUser(request) {
     $.post("saveUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
         if (response.error !== null) {
-            setConfirm('Backend responded with error', '', false, response.error);
+            if(backendValidation(response.error)){
+                return;
+            } else {
+                setConfirm('Backend responded with error', '', false, response.error);
+            }
         }
+        $('#modal').modal('hide');
         getUserData();
         dropRequestAndUserData();
     });
@@ -333,15 +338,13 @@ function saveUser(request) {
 // creating user object, validating and performing add/update action
 $(document).on('click', '#save-user', function () {
     formUser(
-        $("#name_first").val(),
-        $("#name_last").val(),
+        $("#name_first").val().trim(),
+        $("#name_last").val().trim(),
         $("#statusSwitch").prop("checked"),
         $("#role").val()
     )
     if (validation(user) === true) {
         request.data[0] = user;
-
-        $('#modal').modal('hide');
 
         if (request.action === 'add') {
             saveUser(request);
@@ -361,7 +364,6 @@ function dropUsers() {
         }
         getUserData();
         dropRequestAndUserData();
-
     });
 }
 
@@ -384,8 +386,13 @@ function updateUser(request) {
     $.post("updateUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
         if (response.error !== null) {
-            setConfirm('Backend responded with error', '', false, response.error);
+            if(backendValidation(response.error)){
+                return;
+            } else {
+                setConfirm('Backend responded with error', '', false, response.error);
+            }
         }
+        $('#modal').modal('hide');
         getUserData();
         dropRequestAndUserData();
     });
@@ -429,6 +436,30 @@ function validation(user) {
         $("#role-error").text('');
     }
     return noErrors;
+}
+
+
+function backendValidation(error){
+    let validationError = false;
+    if (error.name_first !== null) {
+        $("#name-first-error").text(error.name_first);
+        validationError = true;
+    } else {
+        $("#name-first-error").text('');
+    }
+    if (error.name_last !== null) {
+        $("#name-last-error").text(error.name_last);
+        validationError = true;
+    } else {
+        $("#name-last-error").text('');
+    }
+    if (error.role !== null) {
+        $("#role-error").text(error.role);
+        validationError = true;
+    } else {
+        $("#role-error").text('');
+    }
+    return validationError;
 }
 
 
