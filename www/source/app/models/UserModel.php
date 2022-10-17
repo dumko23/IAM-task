@@ -101,7 +101,14 @@ class UserModel extends Model
     public function updateStatus(array $data): array
     {
         $response = $this->update(['status' => $data['status']], 'id', $data['id']);
-        return Response::createResponse($response);
+
+        $result = Response::createResponse($response);
+
+        if ($result['error'] !== null) {
+            return Response::createResponse($result);
+        } else {
+            return Response::createResponse($data);
+        }
     }
 
     /**

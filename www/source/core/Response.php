@@ -12,7 +12,14 @@ class Response
      */
     public static function createResponse(array $data): array
     {
-        if (array_key_exists('data', $data)) {
+        if (array_key_exists('id', $data)) {
+            return [
+                'status' => true,
+                'error' => null,
+                'id' => $data['id'],
+                'user_status' => $data['status']
+            ];
+        } elseif (array_key_exists('data', $data)) {
             return [
                 'status' => true,
                 'error' => null,

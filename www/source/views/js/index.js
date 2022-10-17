@@ -95,7 +95,7 @@ $(".ok-button").click(function () {
         action = "drop";
     } else {
         prepareUsersId.forEach(user => {
-            users += `'${$(`#${user}`).closest("tr").find(".user-name").text()}', `;
+            users += `'${$(`.user-name${fetchedUserList[user].id}`).text()}', `;
             id.push(fetchedUserList[user].id)
             request.id = id;
         });
@@ -312,10 +312,10 @@ function appendTableRow(data){
                             <input id="user${data.id}" class="single-check" type="checkbox"
                                    aria-label="Select this user">
                         </td>
-                        <td class=" align-middle user-name">${data.name_first} ${data.name_last}</td>
-                        <td class=" align-middle user-role">${data.role}</td>
+                        <td class=" align-middle user-name${data.id}">${data.name_first} ${data.name_last}</td>
+                        <td class=" align-middle user-role${data.id}">${data.role}</td>
                         <td class=" align-middle">
-                                <span class="badge badge-pill ${data.status === 'true' ? 'badge-success' : 'badge-secondary'} p-2 text-center"> </span>
+                                <span class="badge badge-pill status${data.id} ${data.status === 'true' ? 'badge-success' : 'badge-secondary'} p-2 text-center"> </span>
                         </td>
                         <td class="text-center">
                             <div class="btn-group" role="group" aria-label="Basic example">
@@ -379,8 +379,14 @@ function updateStatus() {
         let response = JSON.parse(data)
         if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
+        } else {
+            let userIds = response['id'];
+            userIds.forEach(function(id){
+                $(`.status${id}`).addClass(`${response['user_status'] === 'true' ? 'badge-success' : 'badge-secondary'}`)
+                    .removeClass(`${response['user_status'] === 'true' ? 'badge-secondary' : 'badge-success'}`)
+                fetchedUserList[`user${id}`]['status'] = response['user_status'];
+            })
         }
-        getUserData();
         dropRequestAndUserData();
     });
 }
@@ -400,12 +406,11 @@ function updateUser(request) {
         $('#modal').modal('hide');
         let updatedUser = response['user_data'][0];
         fetchedUserList[`user${updatedUser.id}`] = updatedUser;
-        let tr = $(`#user${updatedUser.id}`).closest("tr");
-        tr.find(".user-name").text(`${updatedUser.name_first} ${updatedUser.name_last}`);
-        tr.find(".badge-pill")
+        $(`.user-name${updatedUser.id}`).text(`${updatedUser.name_first} ${updatedUser.name_last}`);
+        $(`.status${updatedUser.id}`)
                 .addClass(`${updatedUser.status === 'true' ? 'badge-success' : 'badge-secondary'}`)
                 .removeClass(`${updatedUser.status === 'true' ? 'badge-secondary' : 'badge-success'}`)
-        tr.find('.user-role').val(updatedUser.role);
+        $(`.user-role${updatedUser.id}`).val(updatedUser.role);
         dropRequestAndUserData();
     });
 }
