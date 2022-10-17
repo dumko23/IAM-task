@@ -19,6 +19,12 @@ class Response
                 'id' => $data['id'],
                 'user_status' => $data['status']
             ];
+        } elseif (array_key_exists('deleted_id', $data)) {
+            return [
+                'status' => true,
+                'error' => null,
+                'id' => $data['deleted_id']
+            ];
         } elseif (array_key_exists('data', $data)) {
             return [
                 'status' => true,

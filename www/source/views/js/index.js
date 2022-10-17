@@ -186,12 +186,14 @@ $("table").on("click", ".edit-btn", function () {
 
 // triggering delete-user action
 $("tbody").on("click", ".delete-btn", function () {
+
+    let id = fetchedUserList[$(this).closest("tr").find("input").attr("id")].id;
     setConfirm(
         "Delete user",
-        `DELETE user '${$(this).closest("tr").find(".user-name").text()}'?`,
+        `DELETE user '${$(this).closest("tr").find(".user-name" + id).text()}'?`,
         true
     );
-    request.id[0] = fetchedUserList[$(this).closest("tr").find("input").attr("id")].id;
+    request.id[0] = fetchedUserList[`user${id}`].id;
     request.action = "delete";
 })
 
@@ -265,8 +267,13 @@ function deleteUser(request) {
         let response = JSON.parse(data);
         if (response.error !== null) {
             setConfirm('Backend responded with error', '', false, response.error);
+        } else {
+            let userIds = response['id'];
+            userIds.forEach(function(id){
+                $(`#user${id}`).closest('tr').remove();
+                delete fetchedUserList[`user${id}`];
+            })
         }
-        getUserData();
         dropRequestAndUserData();
     });
 }
@@ -326,7 +333,7 @@ function appendTableRow(data){
                                     <i class="fa-solid fa-user-pen"></i>
                                 </button>
                                 <button type="button"
-                                        class="btn btn-light border border-secondary delete-btn"
+                                        class="btn btn-light border border-secondary delete-btn "
                                         data-toggle="modal"
                                         data-target="#confirm">
                                     <i class="fa-solid fa-trash"></i>

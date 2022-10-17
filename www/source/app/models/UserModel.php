@@ -49,8 +49,12 @@ class UserModel extends Model
     public function deleteById(array $data): array
     {
         $response = $this->delete("id", $data);
-        return Response::createResponse($response);
-
+        $result = Response::createResponse($response);
+        if ($result['error'] !== null) {
+            return Response::createResponse($result);
+        } else {
+            return Response::createResponse(['deleted_id' => $data]);
+        }
     }
 
     /**
