@@ -134,11 +134,9 @@ function setConfirm(actionName, actionText, flag, error = '') {
     $("#confirm-title").text(actionName);
     $(".confirm-text").text(actionText);
     if (flag) {
-        $(".confirm-close").addClass("visible").removeClass("invisible");
-        $(".confirm-save").addClass("visible").removeClass("invisible");
+        $(".confirm-save").prop("disabled", false);
     } else {
-        $(".confirm-close").addClass("visible").removeClass("invisible");
-        $(".confirm-save").addClass("invisible").removeClass("visible");
+        $(".confirm-save").prop("disabled", true);
     }
     if (error === '') {
         $(".error-code").text(``);

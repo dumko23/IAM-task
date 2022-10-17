@@ -111,7 +111,7 @@ include('source/views/layouts/header.php');
 
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary confirm-close invisible" data-dismiss="modal">
+                        <button type="button" class="btn btn-secondary confirm-close" data-dismiss="modal">
                             Cancel
                         </button>
                         <button type="button" class="btn btn-primary confirm-save">Confirm</button>
