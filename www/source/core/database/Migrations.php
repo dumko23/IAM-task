@@ -80,7 +80,6 @@ class Migrations
     public function getAppliedMigrations(): array
     {
         return (new Model)->getData(
-            'migrations',
             'migration_name',
             Application::get('config')['database']['db'] . '.migrations'
         );
