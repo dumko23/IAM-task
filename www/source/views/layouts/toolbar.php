@@ -2,7 +2,7 @@
     <button type="button"
             class="btn btn-light border border-secondary add-btn"
             data-toggle="modal"
-            data-target="#modal">Add+
+            data-target="#modal">Add
     </button>
     <div class="input-group w-50">
         <div class="input-group-prepend">
