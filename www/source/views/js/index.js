@@ -237,7 +237,7 @@ $("tbody").on("click", ".delete-btn", function () {
         "Delete user",
         `DELETE user '${$(this).closest("tr").find(".user-name" + id).text()}'?`,
         true,
-        'notice'
+        'confirm'
     );
     request.id[0] = fetchedUserList[`user${id}`].id;
     request.action = "delete";
