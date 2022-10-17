@@ -143,7 +143,7 @@ class Model
     public function getLastItem(){
         return Application::get('database')
             ->getLastItem(
-                'UsersManagement.users', "id"
+                Application::get('config')['database']['dbAndTable'], "id"
             );
     }
 }
