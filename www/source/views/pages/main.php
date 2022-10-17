@@ -110,7 +110,7 @@ include('source/views/layouts/header.php');
                         </div>
 
                     </div>
-                    <div class="modal-footer">
+                    <div class="modal-footer confirm-notice">
                         <button type="button" class="btn btn-secondary confirm-close" data-dismiss="modal">
                             Cancel
                         </button>

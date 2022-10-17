@@ -25,6 +25,8 @@ let fetchedUserList = {};
 $(".massCheck").on("change", function () {
     if ($(this).prop("checked") === true && $(".single-check").length > 0) {
         $(".ok-button").prop("disabled", false);
+    } else if ($(this).prop("checked") === false && $(".select-action").val() !== null) {
+        $(".ok-button").prop("disabled", false);
     } else {
         $(".ok-button").prop("disabled", true);
     }
@@ -39,6 +41,8 @@ $("tbody").on("change", ".single-check", function () {
     $(".massCheck").prop("checked", allChecked);
 
     if ($(".single-check:checked").length > 0) {
+        $(".ok-button").prop("disabled", false);
+    } else if ($(".single-check:checked").length === 0 && $(".select-action").val() !== null) {
         $(".ok-button").prop("disabled", false);
     } else {
         $(".ok-button").prop("disabled", true);
@@ -80,12 +84,20 @@ $(".ok-button").click(function () {
     });
 
     if (action === null) {
-        setConfirm("Notice", "Please, select action to perform. It looks like you've picked users, but forgot to select an action...", false);
+        setConfirm(
+            "Notice",
+            "Please, select action to perform. It looks like you've picked users, but forgot to select an action...",
+            false,
+            'notice');
         return;
     }
 
     if (prepareUsersId.length === 0) {
-        setConfirm("Notice", "Please, select users. It looks like you've selected an action, but forgot to pick users...", false);
+        setConfirm(
+            "Notice",
+            "Please, select users. It looks like you've selected an action, but forgot to pick users...",
+            false,
+            'notice');
         return;
     }
     let users = "user(s) ";
@@ -108,21 +120,37 @@ $(".ok-button").click(function () {
 
     switch (action) {
         case "setActive":
-            setConfirm("Confirm action - Set Active", `Are you sure you want to SET ACTIVE to ${users}?`, true);
+            setConfirm(
+                "Confirm action - Set Active",
+                `Are you sure you want to SET ACTIVE to ${users}?`,
+                true,
+                'confirm');
             request.action = 'setActive';
             request.status = 'true';
             break;
         case "setInactive":
-            setConfirm("Confirm action - Set Inactive", `Are you sure you want to SET INACTIVE to ${users}?`, true);
+            setConfirm(
+                "Confirm action - Set Inactive",
+                `Are you sure you want to SET INACTIVE to ${users}?`,
+                true,
+                'confirm');
             request.action = 'setInactive';
             request.status = 'false';
             break;
         case "delete":
-            setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
+            setConfirm(
+                "Confirm action - Delete",
+                `Are you sure you want to DELETE ${users}?`,
+                true,
+                'confirm');
             request.action = "delete";
             break;
         case "drop":
-            setConfirm("Confirm action - Delete", `Are you sure you want to DELETE ${users}?`, true);
+            setConfirm(
+                "Confirm action - Delete",
+                `Are you sure you want to DELETE ${users}?`,
+                true,
+                'confirm');
             request.action = "drop";
             break;
     }
@@ -130,7 +158,7 @@ $(".ok-button").click(function () {
 
 
 // setting popup's data
-function setConfirm(actionName, actionText, flag, error = '') {
+function setConfirm(actionName, actionText, flag, type, error = '') {
     $("#confirm-title").text(actionName);
     $(".confirm-text").text(actionText);
     if (flag) {
@@ -138,6 +166,22 @@ function setConfirm(actionName, actionText, flag, error = '') {
     } else {
         $(".confirm-save").prop("disabled", true);
     }
+
+    if (type === 'notice') {
+        $('.confirm-notice').empty().append(
+            `<button type="button" class="btn btn-secondary confirm-close" data-dismiss="modal">
+                            Close
+                        </button>`
+        );
+    } else {
+        $('.confirm-notice').empty().append(
+            `<button type="button" class="btn btn-secondary confirm-close" data-dismiss="modal">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary confirm-save">Confirm</button>`
+        );
+    }
+
     if (error === '') {
         $(".error-code").text(``);
         $(".error-message").text(``);
@@ -148,9 +192,10 @@ function setConfirm(actionName, actionText, flag, error = '') {
         $(".error-message").text(`Error Message: "${error.message}"`);
         $(".error-where").text(`Where: "${error.gotIn}"`);
         $(".error-line").text(`Line: "${error.line}"`);
-        $(".btn-div").empty();
-        $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
-        $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
+
+        // $(".btn-div").empty();
+        // $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
+        // $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
         $('#confirm').modal('show');
     }
 }
@@ -191,7 +236,8 @@ $("tbody").on("click", ".delete-btn", function () {
     setConfirm(
         "Delete user",
         `DELETE user '${$(this).closest("tr").find(".user-name" + id).text()}'?`,
-        true
+        true,
+        'notice'
     );
     request.id[0] = fetchedUserList[`user${id}`].id;
     request.action = "delete";
@@ -228,7 +274,12 @@ function getUserData() {
         let userData = JSON.parse(data);
         if (userData.error !== null) {
 
-            setConfirm('Backend responded with error', '', false, userData.error);
+            setConfirm(
+                'Backend responded with error',
+                '',
+                false,
+                'notice',
+                userData.error);
         } else {
             prepareUserList(userData.user_data);
         }
@@ -266,10 +317,15 @@ function deleteUser(request) {
     $.post("delete", {'request': request}, function (data) {
         let response = JSON.parse(data);
         if (response.error !== null) {
-            setConfirm('Backend responded with error', '', false, response.error);
+            setConfirm(
+                'Backend responded with error',
+                '',
+                false,
+                'notice',
+                response.error);
         } else {
             let userIds = response['id'];
-            userIds.forEach(function(id){
+            userIds.forEach(function (id) {
                 $(`#user${id}`).closest('tr').remove();
                 delete fetchedUserList[`user${id}`];
             })
@@ -298,10 +354,15 @@ function saveUser(request) {
     $.post("saveUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
         if (response.error !== null) {
-            if(backendValidation(response.error)){
+            if (backendValidation(response.error)) {
                 return;
             } else {
-                setConfirm('Backend responded with error', '', false, response.error);
+                setConfirm(
+                    'Backend responded with error',
+                    '',
+                    false,
+                    'notice',
+                    response.error);
             }
         }
         $('#modal').modal('hide');
@@ -311,7 +372,7 @@ function saveUser(request) {
 }
 
 
-function appendTableRow(data){
+function appendTableRow(data) {
 
     $("tbody").append(
         `<tr class="text-center">
@@ -372,7 +433,12 @@ function dropUsers() {
     $.post("drop", function (data) {
         let response = JSON.parse(data)
         if (response.error !== null) {
-            setConfirm('Backend responded with error', '', false, response.error);
+            setConfirm(
+                'Backend responded with error',
+                '',
+                false,
+                'notice',
+                response.error);
         }
         getUserData();
         dropRequestAndUserData();
@@ -385,10 +451,15 @@ function updateStatus() {
     $.post("updateStatus", {'request': request}, function (data) {
         let response = JSON.parse(data)
         if (response.error !== null) {
-            setConfirm('Backend responded with error', '', false, response.error);
+            setConfirm(
+                'Backend responded with error',
+                '',
+                false,
+                'notice',
+                response.error);
         } else {
             let userIds = response['id'];
-            userIds.forEach(function(id){
+            userIds.forEach(function (id) {
                 $(`.status${id}`).addClass(`${response['user_status'] === 'true' ? 'badge-success' : 'badge-secondary'}`)
                     .removeClass(`${response['user_status'] === 'true' ? 'badge-secondary' : 'badge-success'}`)
                 fetchedUserList[`user${id}`]['status'] = response['user_status'];
@@ -404,10 +475,15 @@ function updateUser(request) {
     $.post("updateUser", {'request': request}, function (data) {
         let response = JSON.parse(data)
         if (response.error !== null) {
-            if(backendValidation(response.error)){
+            if (backendValidation(response.error)) {
                 return;
             } else {
-                setConfirm('Backend responded with error', '', false, response.error);
+                setConfirm(
+                    'Backend responded with error',
+                    '',
+                    false,
+                    'notice',
+                    response.error);
             }
         }
         $('#modal').modal('hide');
@@ -415,8 +491,8 @@ function updateUser(request) {
         fetchedUserList[`user${updatedUser.id}`] = updatedUser;
         $(`.user-name${updatedUser.id}`).text(`${updatedUser.name_first} ${updatedUser.name_last}`);
         $(`.status${updatedUser.id}`)
-                .addClass(`${updatedUser.status === 'true' ? 'badge-success' : 'badge-secondary'}`)
-                .removeClass(`${updatedUser.status === 'true' ? 'badge-secondary' : 'badge-success'}`)
+            .addClass(`${updatedUser.status === 'true' ? 'badge-success' : 'badge-secondary'}`)
+            .removeClass(`${updatedUser.status === 'true' ? 'badge-secondary' : 'badge-success'}`)
         $(`.user-role${updatedUser.id}`).val(updatedUser.role);
         dropRequestAndUserData();
     });
@@ -463,7 +539,7 @@ function validation(user) {
 }
 
 
-function backendValidation(error){
+function backendValidation(error) {
     let validationError = false;
     if (error.name_first !== null) {
         $("#name-first-error").text(error.name_first);
