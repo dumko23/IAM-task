@@ -440,7 +440,13 @@ function dropUsers() {
                 'notice',
                 response.error);
         }
-        getUserData();
+        $('tbody').empty();
+        $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
+        $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
+
+
+
+
         dropRequestAndUserData();
     });
 }
