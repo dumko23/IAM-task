@@ -490,7 +490,7 @@ function updateUser(request) {
             }
         }
         $('#modal').modal('hide');
-        let updatedUser = response['user_data'][0];
+        let updatedUser = response['user_data'];
         fetchedUserList[`user${updatedUser.id}`] = updatedUser;
         $(`.user-name${updatedUser.id}`).text(`${updatedUser.name_first} ${updatedUser.name_last}`);
         $(`.status${updatedUser.id}`)
