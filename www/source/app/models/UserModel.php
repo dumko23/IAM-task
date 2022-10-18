@@ -137,7 +137,7 @@ class UserModel extends Model
                 Application::get('config')['database']['dbAndTable'],
                 'WHERE id=',
                 $data['id'][0]);
-            return Response::createResponse($response);
+            return Response::createResponse($response['data'][0]);
         } else {
             return Response::createResponse($validation);
         }

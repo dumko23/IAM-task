@@ -12,12 +12,11 @@ class Response
      */
     public static function createResponse(array $data): array
     {
-        if (array_key_exists('id', $data)) {
+        if (array_key_exists('name_first', $data)) {
             return [
                 'status' => true,
                 'error' => null,
-                'id' => $data['id'],
-                'user_status' => $data['status']
+                'user_data' => $data
             ];
         } elseif (array_key_exists('deleted_id', $data)) {
             return [
@@ -30,6 +29,13 @@ class Response
                 'status' => true,
                 'error' => null,
                 'user_data' => $data['data']
+            ];
+        } elseif (array_key_exists('id', $data)) {
+            return [
+                'status' => true,
+                'error' => null,
+                'id' => $data['id'],
+                'user_status' => $data['status']
             ];
         } elseif (array_key_exists('error', $data)) {
             return [
