@@ -8,6 +8,9 @@ To run this project as it is, the latest version of Docker and Composer should b
 If you want to run this project on a different environment - the actual project files located in "```www/```" folder.
 
 
+Preview: ```https://softsprint-task.000webhostapp.com/```
+
+
 ## Docker
 Crete ```.env``` files in project root and "www" folders, then copy content of the ```sample.example.env``` according to its location to ```.env``` files. 
 Here you can manage your DB credentials or leave it as it is.
