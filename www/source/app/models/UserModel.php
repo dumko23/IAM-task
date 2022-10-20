@@ -53,7 +53,7 @@ class UserModel extends Model
         if ($result['error'] !== null) {
             return Response::createResponse($result);
         } else {
-            return Response::createResponse(['deleted_id' => $data]);
+            return Response::createResponse(['changed_id' => $data]);
         }
     }
 
@@ -104,14 +104,12 @@ class UserModel extends Model
      */
     public function updateStatus(array $data): array
     {
-        $response = $this->update(['status' => $data['status']], 'id', $data['id']);
+        $result = $this->update(['status' => $data['status']], 'id', $data['id']);
 
-        $result = Response::createResponse($response);
-
-        if ($result['error'] !== null) {
+        if (key_exists("error", $result)) {
             return Response::createResponse($result);
         } else {
-            return Response::createResponse($data);
+            return Response::createResponse(['changed_id' => $data['id']]);
         }
     }
 
@@ -129,15 +127,7 @@ class UserModel extends Model
         $validation = $this->validation($data['data'][0], $this->rules());
         if ($validation === true) {
             $result = $this->update($data['data'][0], 'id', $data['id']);
-            if (array_key_exists('error', $result) === true) {
-                return Response::createResponse($result);
-            }
-            $response = $this->getData(
-                'name_first, name_last, role, status, id',
-                Application::get('config')['database']['dbAndTable'],
-                'WHERE id=',
-                $data['id'][0]);
-            return Response::createResponse($response['data'][0]);
+            return Response::createResponse($result);
         } else {
             return Response::createResponse($validation);
         }

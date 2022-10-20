@@ -324,7 +324,7 @@ function deleteUser(request) {
                 'notice',
                 response.error);
         } else {
-            let userIds = response['id'];
+            let userIds = request.id;
             userIds.forEach(function (id) {
                 $(`#user${id}`).closest('tr').remove();
                 delete fetchedUserList[`user${id}`];
@@ -463,9 +463,9 @@ function updateStatus() {
         } else {
             let userIds = response['id'];
             userIds.forEach(function (id) {
-                $(`.status${id}`).addClass(`${response['user_status'] === 'true' ? 'badge-success' : 'badge-secondary'}`)
-                    .removeClass(`${response['user_status'] === 'true' ? 'badge-secondary' : 'badge-success'}`)
-                fetchedUserList[`user${id}`]['status'] = response['user_status'];
+                $(`.status${id}`).addClass(`${request.status === 'true' ? 'badge-success' : 'badge-secondary'}`)
+                    .removeClass(`${request.status === 'true' ? 'badge-secondary' : 'badge-success'}`)
+                fetchedUserList[`user${id}`]['status'] = request.status;
             })
         }
         dropRequestAndUserData();
@@ -490,13 +490,14 @@ function updateUser(request) {
             }
         }
         $('#modal').modal('hide');
-        let updatedUser = response['user_data'];
-        fetchedUserList[`user${updatedUser.id}`] = updatedUser;
-        $(`.user-name${updatedUser.id}`).text(`${updatedUser.name_first} ${updatedUser.name_last}`);
-        $(`.status${updatedUser.id}`)
-            .addClass(`${updatedUser.status === 'true' ? 'badge-success' : 'badge-secondary'}`)
-            .removeClass(`${updatedUser.status === 'true' ? 'badge-secondary' : 'badge-success'}`)
-        $(`.user-role${updatedUser.id}`).val(updatedUser.role);
+        let updatedUser = request.data[0];
+        fetchedUserList[`user${request.id[0]}`] = updatedUser;
+        fetchedUserList[`user${request.id[0]}`].id = request.id[0];
+        $(`.user-name${request.id[0]}`).text(`${updatedUser.name_first} ${updatedUser.name_last}`);
+        $(`.status${request.id[0]}`)
+            .addClass(`${updatedUser.status === true ? 'badge-success' : 'badge-secondary'}`)
+            .removeClass(`${updatedUser.status === true ? 'badge-secondary' : 'badge-success'}`)
+        $(`.user-role${request.id[0]}`).text(updatedUser.role);
         dropRequestAndUserData();
     });
 }

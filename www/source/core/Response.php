@@ -18,24 +18,17 @@ class Response
                 'error' => null,
                 'user_data' => $data
             ];
-        } elseif (array_key_exists('deleted_id', $data)) {
+        } elseif (array_key_exists('changed_id', $data)) {
             return [
                 'status' => true,
                 'error' => null,
-                'id' => $data['deleted_id']
+                'id' => $data['changed_id']
             ];
         } elseif (array_key_exists('data', $data)) {
             return [
                 'status' => true,
                 'error' => null,
                 'user_data' => $data['data']
-            ];
-        } elseif (array_key_exists('id', $data)) {
-            return [
-                'status' => true,
-                'error' => null,
-                'id' => $data['id'],
-                'user_status' => $data['status']
             ];
         } elseif (array_key_exists('error', $data)) {
             return [
