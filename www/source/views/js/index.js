@@ -77,6 +77,10 @@ $("#statusSwitch").on("change", function () {
 
 // mass-action assign functionality
 $(".ok-button").click(function () {
+    request.action = '';
+    request.id = [];
+    request.data = [];
+    request.status = [];
     let prepareUsersId = [];
     let action = $(".select-action").val();
     $(".single-check:checkbox:checked").each(function () {
@@ -209,6 +213,7 @@ $(".close-btn").on("click", function () {
 
 // triggering add-user action
 $(".add-btn").on("click", function () {
+    dropRequestAndUserData();
     assignUserDataToModal("", "", "true", "Add new user");
     request.action = "add";
 })
@@ -216,6 +221,7 @@ $(".add-btn").on("click", function () {
 
 // triggering edit-user action with data assigning
 $("table").on("click", ".edit-btn", function () {
+    dropRequestAndUserData();
     let id = $(this).closest("tr").find("input").attr("id");
     assignUserDataToModal(
         fetchedUserList[id].name_first,
@@ -231,7 +237,7 @@ $("table").on("click", ".edit-btn", function () {
 
 // triggering delete-user action
 $("tbody").on("click", ".delete-btn", function () {
-
+    dropRequestAndUserData();
     let id = fetchedUserList[$(this).closest("tr").find("input").attr("id")].id;
     setConfirm(
         "Delete user",
@@ -330,7 +336,7 @@ function deleteUser(request) {
                 delete fetchedUserList[`user${id}`];
             })
         }
-        dropRequestAndUserData();
+        // dropRequestAndUserData();
     });
 }
 
@@ -367,7 +373,6 @@ function saveUser(request) {
         }
         $('#modal').modal('hide');
         appendTableRow(response['user_data']);
-        dropRequestAndUserData();
     });
 }
 
@@ -444,7 +449,6 @@ function dropUsers() {
         $(".btn-div").append(`<h5 class="text-center py-3 no-data">There is no data in DB</h5>`);
         $(".no-data").after(`<button type="button" class="btn btn-light border border-secondary refresh px-5">Refresh</button>`);
         fetchedUserList = {};
-        dropRequestAndUserData();
     });
 }
 
@@ -468,7 +472,10 @@ function updateStatus() {
                 fetchedUserList[`user${id}`]['status'] = request.status;
             })
         }
-        dropRequestAndUserData();
+        $(".massCheck").prop("checked", false);
+        $(".single-check").prop("checked", false);
+        $(".select-action").val("select");
+        $(".ok-button").prop("disabled", true);
     });
 }
 
@@ -490,15 +497,14 @@ function updateUser(request) {
             }
         }
         $('#modal').modal('hide');
-        let updatedUser = request.data[0];
-        fetchedUserList[`user${request.id[0]}`] = updatedUser;
+        Object.assign(fetchedUserList[`user${request.id[0]}`], request.data[0]);
+        fetchedUserList[`user${request.id[0]}`].status = fetchedUserList[`user${request.id[0]}`].status.toString();
         fetchedUserList[`user${request.id[0]}`].id = request.id[0];
-        $(`.user-name${request.id[0]}`).text(`${updatedUser.name_first} ${updatedUser.name_last}`);
+        $(`.user-name${request.id[0]}`).text(`${request.data[0].name_first} ${request.data[0].name_last}`);
         $(`.status${request.id[0]}`)
-            .addClass(`${updatedUser.status === true ? 'badge-success' : 'badge-secondary'}`)
-            .removeClass(`${updatedUser.status === true ? 'badge-secondary' : 'badge-success'}`)
-        $(`.user-role${request.id[0]}`).text(updatedUser.role);
-        dropRequestAndUserData();
+            .addClass(`${request.data[0].status === true ? 'badge-success' : 'badge-secondary'}`)
+            .removeClass(`${request.data[0].status === true ? 'badge-secondary' : 'badge-success'}`)
+        $(`.user-role${request.id[0]}`).text(request.data[0].role);
     });
 }
 
